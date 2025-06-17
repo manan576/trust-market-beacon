@@ -12,17 +12,21 @@ const Index = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [cartItems, setCartItems] = useState([]);
 
-  const addToCart = (product) => {
+  const addToCart = (productWithMerchant) => {
+    console.log('Adding to cart:', productWithMerchant);
     setCartItems(prev => {
-      const existing = prev.find(item => item.id === product.id);
+      const existing = prev.find(item => 
+        item.id === productWithMerchant.id && 
+        item.merchant.id === productWithMerchant.merchant.id
+      );
       if (existing) {
         return prev.map(item => 
-          item.id === product.id 
+          (item.id === productWithMerchant.id && item.merchant.id === productWithMerchant.merchant.id)
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
-      return [...prev, { ...product, quantity: 1 }];
+      return [...prev, { ...productWithMerchant, quantity: 1 }];
     });
   };
 
