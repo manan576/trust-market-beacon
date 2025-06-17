@@ -1,13 +1,15 @@
 
 import { useState } from 'react';
 import Header from '../components/Header';
+import HomePage from './HomePage';
 import ProductGrid from '../components/ProductGrid';
 import ProductDetail from '../components/ProductDetail';
 import Cart from '../components/Cart';
 
 const Index = () => {
+  const [currentView, setCurrentView] = useState('home'); // 'home', 'category', 'product', 'cart'
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [showCart, setShowCart] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [cartItems, setCartItems] = useState([]);
 
   const addToCart = (product) => {
@@ -42,33 +44,76 @@ const Index = () => {
     );
   };
 
+  const handleCategorySelect = (categoryId) => {
+    setSelectedCategory(categoryId);
+    setCurrentView('category');
+  };
+
+  const handleProductClick = (product) => {
+    setSelectedProduct(product);
+    setCurrentView('product');
+  };
+
+  const handleBackToHome = () => {
+    setCurrentView('home');
+    setSelectedCategory(null);
+    setSelectedProduct(null);
+  };
+
+  const handleBackToCategory = () => {
+    setCurrentView('category');
+    setSelectedProduct(null);
+  };
+
+  const handleShowCart = () => {
+    setCurrentView('cart');
+  };
+
+  const handleCloseCart = () => {
+    if (selectedProduct) {
+      setCurrentView('product');
+    } else if (selectedCategory) {
+      setCurrentView('category');
+    } else {
+      setCurrentView('home');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header 
         cartCount={cartItems.reduce((sum, item) => sum + item.quantity, 0)}
-        onCartClick={() => setShowCart(true)}
-        onLogoClick={() => {
-          setSelectedProduct(null);
-          setShowCart(false);
-        }}
+        onCartClick={handleShowCart}
+        onLogoClick={handleBackToHome}
       />
       
-      <main className="container mx-auto px-4 py-6">
-        {showCart ? (
+      <main className="container mx-auto px-4 py-8">
+        {currentView === 'cart' && (
           <Cart 
             items={cartItems}
-            onClose={() => setShowCart(false)}
+            onClose={handleCloseCart}
             onUpdateQuantity={updateQuantity}
             onRemove={removeFromCart}
           />
-        ) : selectedProduct ? (
+        )}
+        
+        {currentView === 'product' && selectedProduct && (
           <ProductDetail 
             product={selectedProduct}
-            onBack={() => setSelectedProduct(null)}
+            onBack={handleBackToCategory}
             onAddToCart={addToCart}
           />
-        ) : (
-          <ProductGrid onProductClick={setSelectedProduct} />
+        )}
+        
+        {currentView === 'category' && (
+          <ProductGrid 
+            onProductClick={handleProductClick}
+            selectedCategory={selectedCategory}
+          />
+        )}
+        
+        {currentView === 'home' && (
+          <HomePage onCategorySelect={handleCategorySelect} />
         )}
       </main>
     </div>
