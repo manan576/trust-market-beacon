@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, Star, ShoppingCart, Shield, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Star, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -23,6 +23,7 @@ interface Review {
   comment: string;
   date: Date;
   credibilityScore: number;
+  merchantId: string;
 }
 
 interface Product {
@@ -42,9 +43,72 @@ interface ProductDetailProps {
   onAddToCart: (product: any) => void;
 }
 
-const ProductDetail = ({ product, onBack, onAddToCart }: ProductDetailProps) => {
+// Generate unique reviews for each merchant
+const generateMerchantReviews = (productId: string, merchants: Merchant[]): Review[] => {
+  const allReviews: Review[] = [];
+  
+  const customerNames = [
+    'Alice Johnson', 'Bob Smith', 'Carol Williams', 'David Brown', 'Emma Davis',
+    'Frank Miller', 'Grace Wilson', 'Henry Moore', 'Ivy Taylor', 'Jack Anderson',
+    'Karen Thomas', 'Liam Jackson', 'Mia White', 'Noah Harris', 'Olivia Martin',
+    'Paul Thompson', 'Quinn Garcia', 'Ruby Martinez', 'Sam Robinson', 'Tina Clark',
+    'Uma Rodriguez', 'Victor Lewis', 'Wendy Lee', 'Xavier Walker', 'Yara Hall',
+    'Zoe Allen', 'Adam Young', 'Bella King', 'Chris Wright', 'Diana Lopez'
+  ];
+
+  const comments = [
+    'Excellent product! Exactly what I was looking for.',
+    'Great quality and fast shipping. Very satisfied.',
+    'Good value for money. Would recommend to others.',
+    'Product works as described. Happy with my purchase.',
+    'Outstanding quality and customer service.',
+    'Fast delivery and well packaged. Product is perfect.',
+    'Exceeded my expectations. Will buy again.',
+    'Solid product, good build quality.',
+    'Very pleased with this purchase. Great seller.',
+    'Perfect item, exactly as described in listing.',
+    'Amazing product quality. Highly recommend!',
+    'Good product but shipping took a while.',
+    'Decent quality for the price point.',
+    'Works well, no complaints so far.',
+    'Impressive quality and attention to detail.',
+    'Great customer service and quick response.',
+    'Product arrived quickly and in perfect condition.',
+    'Very happy with this purchase. Five stars!',
+    'Good product, meets all my requirements.',
+    'Excellent value and great communication from seller.'
+  ];
+
+  merchants.forEach((merchant, merchantIndex) => {
+    for (let i = 0; i < 10; i++) {
+      const reviewIndex = (merchantIndex * 10) + i;
+      const customerIndex = reviewIndex % customerNames.length;
+      const commentIndex = reviewIndex % comments.length;
+      
+      allReviews.push({
+        id: `${productId}-${merchant.id}-${i}`,
+        customerName: customerNames[customerIndex],
+        rating: Math.floor(Math.random() * 2) + 4, // 4 or 5 stars mostly
+        comment: comments[commentIndex],
+        date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000), // Random date within last year
+        credibilityScore: Math.random(),
+        merchantId: merchant.id
+      });
+    }
+  });
+
+  return allReviews;
+};
+
+const ProductDetail = ({ product, onBack }: ProductDetailProps) => {
   const [selectedMerchant, setSelectedMerchant] = useState(product.merchants[0]);
   const [reviewSort, setReviewSort] = useState('newest');
+
+  // Generate all reviews for all merchants
+  const allReviews = generateMerchantReviews(product.id, product.merchants);
+  
+  // Filter reviews for current merchant
+  const merchantReviews = allReviews.filter(review => review.merchantId === selectedMerchant.id);
 
   const handleAddToCart = () => {
     const cartItem = {
@@ -103,7 +167,7 @@ const ProductDetail = ({ product, onBack, onAddToCart }: ProductDetailProps) => 
     }
   };
 
-  const sortedReviews = sortReviews(product.reviews, reviewSort);
+  const sortedReviews = sortReviews(merchantReviews, reviewSort);
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -190,15 +254,6 @@ const ProductDetail = ({ product, onBack, onAddToCart }: ProductDetailProps) => 
               </div>
             </CardContent>
           </Card>
-
-          <Button 
-            size="lg" 
-            className="w-full bg-orange-500 hover:bg-orange-600"
-            onClick={handleAddToCart}
-          >
-            <ShoppingCart className="h-5 w-5 mr-2" />
-            Add to Cart - ${selectedMerchant.price}
-          </Button>
         </div>
       </div>
 

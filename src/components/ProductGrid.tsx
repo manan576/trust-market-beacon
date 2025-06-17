@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { Star, Badge, Filter, ArrowUpDown } from 'lucide-react';
+import { Star, ArrowUpDown } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -265,7 +265,7 @@ const products: Product[] = [
     name: "Luxury Bed Frame King Size",
     image: "/placeholder.svg",
     rating: 4.7,
-    reviewContent: 89,
+    reviewCount: 89,
     category: "furniture",
     bestPrice: 599.99,
     merchants: [
@@ -368,16 +368,6 @@ const products: Product[] = [
   }
 ];
 
-const getCreditTagColor = (tag: string) => {
-  switch (tag) {
-    case 'Amazing': return 'bg-green-100 text-green-800 border-green-300';
-    case 'Excellent': return 'bg-blue-100 text-blue-800 border-blue-300';
-    case 'Good': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
-    case 'Moderate': return 'bg-gray-100 text-gray-800 border-gray-300';
-    default: return 'bg-gray-100 text-gray-800 border-gray-300';
-  }
-};
-
 const ProductGrid = ({ onProductClick, selectedCategory }: ProductGridProps) => {
   const [sortBy, setSortBy] = useState('relevance');
   
@@ -449,17 +439,6 @@ const ProductGrid = ({ onProductClick, selectedCategory }: ProductGridProps) => 
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
-                  <div className="absolute top-4 left-4">
-                    <div className={`px-3 py-1 rounded-full text-xs font-bold border ${getCreditTagColor(bestMerchant.creditTag)}`}>
-                      <Badge className="h-3 w-3 mr-1" />
-                      Best: {bestMerchant.creditTag}
-                    </div>
-                  </div>
-                  {product.bestPrice < bestMerchant.price && (
-                    <div className="absolute top-4 right-4 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold">
-                      DEAL
-                    </div>
-                  )}
                 </div>
                 
                 <div className="p-6">
