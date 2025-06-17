@@ -1,5 +1,6 @@
+
 import { useState } from 'react';
-import { ArrowLeft, Star, Shield } from 'lucide-react';
+import { ArrowLeft, Star, Shield, Truck, Gift, ShoppingCart, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -14,6 +15,8 @@ interface Merchant {
   totalReviews: number;
   price: number;
   originalPrice?: number;
+  deliveryDate: string;
+  offers: string[];
 }
 
 interface Review {
@@ -30,9 +33,11 @@ interface Product {
   id: string;
   name: string;
   description: string;
+  shortDescription: string;
   image: string;
   category: string;
   rating: number;
+  overallRating: number;
   merchants: Merchant[];
   reviews: Review[];
 }
@@ -40,7 +45,6 @@ interface Product {
 interface ProductDetailProps {
   product: Product;
   onBack: () => void;
-  onAddToCart: (product: any) => void;
 }
 
 // Generate unique reviews for each merchant
@@ -85,12 +89,18 @@ const generateMerchantReviews = (productId: string, merchants: Merchant[]): Revi
       const customerIndex = reviewIndex % customerNames.length;
       const commentIndex = reviewIndex % comments.length;
       
+      // Generate ratings that average to the merchant's rating
+      const baseRating = merchant.rating;
+      const variation = (Math.random() - 0.5) * 2; // -1 to 1
+      let rating = Math.round(baseRating + variation);
+      rating = Math.max(1, Math.min(5, rating)); // Clamp between 1 and 5
+      
       allReviews.push({
         id: `${productId}-${merchant.id}-${i}`,
         customerName: customerNames[customerIndex],
-        rating: Math.floor(Math.random() * 2) + 4, // 4 or 5 stars mostly
+        rating: rating,
         comment: comments[commentIndex],
-        date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000), // Random date within last year
+        date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
         credibilityScore: Math.random(),
         merchantId: merchant.id
       });
@@ -110,25 +120,16 @@ const ProductDetail = ({ product, onBack }: ProductDetailProps) => {
   // Filter reviews for current merchant
   const merchantReviews = allReviews.filter(review => review.merchantId === selectedMerchant.id);
 
-  const handleAddToCart = () => {
-    const cartItem = {
-      ...product,
-      merchant: selectedMerchant,
-      price: selectedMerchant.price
-    };
-    onAddToCart(cartItem);
-  };
-
   const getCreditTagColor = (creditTag: string) => {
     switch (creditTag) {
-      case 'Amazing':
-        return 'bg-green-500';
+      case 'Excellent':
+        return 'bg-green-400 text-white';
       case 'Good':
-        return 'bg-blue-500';
+        return 'bg-orange-400 text-white';
       case 'Moderate':
-        return 'bg-yellow-500';
+        return 'bg-blue-400 text-white';
       default:
-        return 'bg-gray-500';
+        return 'bg-gray-500 text-white';
     }
   };
 
@@ -190,7 +191,24 @@ const ProductDetail = ({ product, onBack }: ProductDetailProps) => {
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-2">{product.name}</h1>
-            <p className="text-gray-600 text-lg">{product.description}</p>
+            <p className="text-gray-600 text-lg mb-3">{product.shortDescription}</p>
+            <div className="flex items-center mb-4">
+              <div className="flex items-center">
+                {[...Array(5)].map((_, i) => (
+                  <Star 
+                    key={i} 
+                    className={`h-5 w-5 ${
+                      i < Math.floor(product.overallRating) 
+                        ? 'text-yellow-400 fill-current' 
+                        : 'text-gray-300'
+                    }`} 
+                  />
+                ))}
+              </div>
+              <span className="text-lg font-medium text-gray-700 ml-2">
+                {product.overallRating.toFixed(1)} overall rating
+              </span>
+            </div>
           </div>
 
           {/* Merchant Selection */}
@@ -208,19 +226,18 @@ const ProductDetail = ({ product, onBack }: ProductDetailProps) => {
                     }`}
                     onClick={() => setSelectedMerchant(merchant)}
                   >
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between items-start mb-3">
                       <div>
-                        <div className="flex items-center space-x-3">
+                        <div className="flex items-center space-x-3 mb-2">
                           <h4 className="font-medium">{merchant.name}</h4>
                           <Badge 
-                            variant="secondary"
-                            className={`${getCreditTagColor(merchant.creditTag)} text-white`}
+                            className={`${getCreditTagColor(merchant.creditTag)} border-0 font-medium px-3 py-1 rounded-full`}
                           >
                             <Shield className="h-3 w-3 mr-1" />
                             {merchant.creditTag}
                           </Badge>
                         </div>
-                        <div className="flex items-center mt-1">
+                        <div className="flex items-center mb-2">
                           <div className="flex items-center">
                             {[...Array(5)].map((_, i) => (
                               <Star 
@@ -234,7 +251,7 @@ const ProductDetail = ({ product, onBack }: ProductDetailProps) => {
                             ))}
                           </div>
                           <span className="text-sm text-gray-600 ml-2">
-                            {merchant.rating} ({merchant.totalReviews} reviews)
+                            {merchant.rating} from this merchant ({merchant.totalReviews} reviews)
                           </span>
                         </div>
                       </div>
@@ -248,6 +265,38 @@ const ProductDetail = ({ product, onBack }: ProductDetailProps) => {
                           </div>
                         )}
                       </div>
+                    </div>
+
+                    {/* Offers */}
+                    <div className="mb-3">
+                      <div className="flex flex-wrap gap-2">
+                        {merchant.offers.map((offer, index) => (
+                          <span key={index} className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded flex items-center">
+                            <Gift className="h-3 w-3 mr-1" />
+                            {offer}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Delivery Date */}
+                    <div className="mb-4">
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Truck className="h-4 w-4 mr-2" />
+                        Delivery by {merchant.deliveryDate}
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex space-x-3">
+                      <Button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white">
+                        <ShoppingCart className="h-4 w-4 mr-2" />
+                        Add to Cart
+                      </Button>
+                      <Button className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white">
+                        <Zap className="h-4 w-4 mr-2" />
+                        Buy Now
+                      </Button>
                     </div>
                   </div>
                 ))}
@@ -344,11 +393,11 @@ const ProductDetail = ({ product, onBack }: ProductDetailProps) => {
                   <p className="text-gray-600">Premium Brand</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900">Rating</h4>
-                  <p className="text-gray-600">{product.rating} out of 5</p>
+                  <h4 className="font-medium text-gray-900">Overall Rating</h4>
+                  <p className="text-gray-600">{product.overallRating} out of 5</p>
                 </div>
                 <div>
-                  <h4 className="font-medium text-gray-900">Reviews</h4>
+                  <h4 className="font-medium text-gray-900">Total Reviews</h4>
                   <p className="text-gray-600">{selectedMerchant.totalReviews} customer reviews</p>
                 </div>
               </div>

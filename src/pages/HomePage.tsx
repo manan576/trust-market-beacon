@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { ShoppingBag, Smartphone, Heart, Sofa, Dumbbell, Camera } from 'lucide-react';
+import { ShoppingBag, Smartphone, Heart, Sofa, Dumbbell, Coffee } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -57,6 +57,14 @@ const categories: Category[] = [
     description: 'Sports equipment & fitness gear',
     productCount: 5,
     gradient: 'from-green-500 to-teal-600'
+  },
+  {
+    id: 'everyday-essentials',
+    name: 'Everyday Essentials',
+    icon: Coffee,
+    description: 'Daily necessities & household items',
+    productCount: 5,
+    gradient: 'from-amber-500 to-orange-600'
   }
 ];
 
@@ -149,7 +157,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
               <span className="text-3xl">🛡️</span>
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-3">Merchant Credit Tags</h3>
-            <p className="text-gray-600">Every merchant gets a verified credit rating from Moderate to Amazing based on their track record.</p>
+            <p className="text-gray-600">Every merchant gets a verified credit rating: Excellent, Good, or Moderate based on their track record.</p>
           </div>
           
           <div className="text-center">

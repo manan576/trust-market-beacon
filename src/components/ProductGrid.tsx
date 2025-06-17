@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Star, ArrowUpDown } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
@@ -8,17 +7,24 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 interface Merchant {
   id: number;
   name: string;
-  creditTag: 'Moderate' | 'Good' | 'Excellent' | 'Amazing';
+  creditTag: 'Moderate' | 'Good' | 'Excellent';
   price: number;
+  originalPrice?: number;
   shipping: string;
   inStock: boolean;
+  rating: number;
+  totalReviews: number;
+  deliveryDate: string;
+  offers: string[];
 }
 
 interface Product {
   id: number;
   name: string;
+  shortDescription: string;
   image: string;
   rating: number;
+  overallRating: number;
   reviewCount: number;
   category: string;
   merchants: Merchant[];
@@ -30,340 +36,225 @@ interface ProductGridProps {
   selectedCategory?: string;
 }
 
+// Generate different delivery dates
+const generateDeliveryDate = (merchantIndex: number) => {
+  const baseDate = new Date();
+  baseDate.setDate(baseDate.getDate() + 2 + merchantIndex * 2); // 2, 4, 6 days etc.
+  return baseDate.toLocaleDateString('en-US', { 
+    weekday: 'short', 
+    month: 'short', 
+    day: 'numeric' 
+  });
+};
+
+// Generate offers for merchants
+const generateOffers = (merchantIndex: number) => {
+  const allOffers = [
+    ['Free shipping', '10% off'],
+    ['Express delivery', '5% cashback'],
+    ['Free returns', 'Buy 2 Get 1 Free'],
+    ['Same day delivery', '15% off first order']
+  ];
+  return allOffers[merchantIndex % allOffers.length];
+};
+
 const products: Product[] = [
   // Electronics
   {
     id: 1,
     name: "Wireless Bluetooth Headphones Pro",
+    shortDescription: "High-quality wireless headphones with noise cancellation\nPerfect for music and calls with 30-hour battery life",
     image: "/placeholder.svg",
     rating: 4.5,
+    overallRating: 4.3,
     reviewCount: 247,
     category: "electronics",
     bestPrice: 69.99,
     merchants: [
-      { id: 1, name: "AudioTech Pro", creditTag: "Excellent", price: 79.99, shipping: "Free", inStock: true },
-      { id: 2, name: "SoundWave", creditTag: "Good", price: 74.99, shipping: "$3.99", inStock: true },
-      { id: 3, name: "TechDeals", creditTag: "Amazing", price: 69.99, shipping: "Free", inStock: false }
+      { id: 1, name: "AudioTech Pro", creditTag: "Excellent", price: 79.99, shipping: "Free", inStock: true, rating: 4.6, totalReviews: 89, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 2, name: "SoundWave", creditTag: "Good", price: 74.99, shipping: "$3.99", inStock: true, rating: 4.2, totalReviews: 67, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 3, name: "TechDeals", creditTag: "Moderate", price: 69.99, shipping: "Free", inStock: false, rating: 4.1, totalReviews: 91, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
     ]
   },
   {
     id: 2,
     name: "Smart Phone 5G Latest Model",
+    shortDescription: "Latest 5G smartphone with advanced camera system\nFast processor and all-day battery life",
     image: "/placeholder.svg",
     rating: 4.7,
+    overallRating: 4.5,
     reviewCount: 892,
     category: "electronics",
     bestPrice: 799.99,
     merchants: [
-      { id: 4, name: "MobileTech", creditTag: "Amazing", price: 849.99, shipping: "Free", inStock: true },
-      { id: 5, name: "PhoneHub", creditTag: "Excellent", price: 799.99, shipping: "Free", inStock: true }
+      { id: 4, name: "MobileTech", creditTag: "Excellent", price: 849.99, shipping: "Free", inStock: true, rating: 4.8, totalReviews: 234, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 5, name: "PhoneHub", creditTag: "Good", price: 799.99, shipping: "Free", inStock: true, rating: 4.4, totalReviews: 187, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 6, name: "GadgetWorld", creditTag: "Moderate", price: 829.99, shipping: "$9.99", inStock: true, rating: 4.3, totalReviews: 156, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
     ]
   },
   {
     id: 3,
     name: "4K Ultra HD Smart TV 55 inch",
+    shortDescription: "Stunning 4K display with smart streaming capabilities\nBuilt-in apps and voice control features",
     image: "/placeholder.svg",
     rating: 4.4,
-    reviewCount: 156,
+    overallRating: 4.2,
+    reviewCount: 456,
     category: "electronics",
     bestPrice: 599.99,
     merchants: [
-      { id: 6, name: "ElectroWorld", creditTag: "Good", price: 649.99, shipping: "$25.99", inStock: true },
-      { id: 7, name: "TV Central", creditTag: "Excellent", price: 599.99, shipping: "Free", inStock: true }
+      { id: 7, name: "ElectroWorld", creditTag: "Good", price: 649.99, shipping: "$25.99", inStock: true, rating: 4.3, totalReviews: 123, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 8, name: "TV Central", creditTag: "Excellent", price: 599.99, shipping: "Free", inStock: true, rating: 4.5, totalReviews: 198, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 9, name: "HomeElectronics", creditTag: "Moderate", price: 619.99, shipping: "$15.99", inStock: true, rating: 3.9, totalReviews: 135, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
     ]
   },
   {
     id: 4,
     name: "Wireless Gaming Keyboard",
+    shortDescription: "Mechanical gaming keyboard with RGB backlighting\nWireless connectivity and programmable keys",
     image: "/placeholder.svg",
     rating: 4.3,
+    overallRating: 4.1,
     reviewCount: 312,
     category: "electronics",
     bestPrice: 89.99,
     merchants: [
-      { id: 8, name: "GameGear Plus", creditTag: "Excellent", price: 99.99, shipping: "Free", inStock: true },
-      { id: 9, name: "ProGaming", creditTag: "Amazing", price: 89.99, shipping: "$1.99", inStock: true }
+      { id: 10, name: "GameGear Plus", creditTag: "Excellent", price: 99.99, shipping: "Free", inStock: true, rating: 4.4, totalReviews: 87, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 11, name: "ProGaming", creditTag: "Good", price: 89.99, shipping: "$1.99", inStock: true, rating: 4.2, totalReviews: 112, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 12, name: "TechAccessories", creditTag: "Moderate", price: 94.99, shipping: "$3.99", inStock: true, rating: 3.7, totalReviews: 113, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
     ]
   },
   {
     id: 5,
     name: "Portable Power Bank 20000mAh",
+    shortDescription: "High-capacity power bank with fast charging\nCompact design with multiple charging ports",
     image: "/placeholder.svg",
     rating: 4.6,
-    reviewCount: 89,
+    overallRating: 4.4,
+    reviewCount: 189,
     category: "electronics",
     bestPrice: 39.99,
     merchants: [
-      { id: 10, name: "PowerSolutions", creditTag: "Good", price: 44.99, shipping: "$2.99", inStock: true },
-      { id: 11, name: "ChargeIt", creditTag: "Excellent", price: 39.99, shipping: "Free", inStock: true }
+      { id: 13, name: "PowerSolutions", creditTag: "Good", price: 44.99, shipping: "$2.99", inStock: true, rating: 4.5, totalReviews: 67, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 14, name: "ChargeIt", creditTag: "Excellent", price: 39.99, shipping: "Free", inStock: true, rating: 4.7, totalReviews: 89, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 15, name: "MobilePower", creditTag: "Moderate", price: 42.99, shipping: "$1.99", inStock: true, rating: 4.0, totalReviews: 33, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
     ]
   },
 
-  // Fashion
+  // Fashion - with different ratings
   {
     id: 6,
     name: "Premium Cotton T-Shirt",
+    shortDescription: "Soft premium cotton t-shirt with perfect fit\nBreathable fabric and long-lasting quality",
     image: "/placeholder.svg",
     rating: 4.2,
+    overallRating: 4.0,
     reviewCount: 203,
     category: "fashion",
     bestPrice: 24.99,
     merchants: [
-      { id: 12, name: "Fashion Forward", creditTag: "Excellent", price: 29.99, shipping: "$3.99", inStock: true },
-      { id: 13, name: "StyleHub", creditTag: "Good", price: 24.99, shipping: "Free", inStock: true }
+      { id: 16, name: "Fashion Forward", creditTag: "Excellent", price: 29.99, shipping: "$3.99", inStock: true, rating: 4.3, totalReviews: 78, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 17, name: "StyleHub", creditTag: "Good", price: 24.99, shipping: "Free", inStock: true, rating: 4.1, totalReviews: 89, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 18, name: "CasualWear", creditTag: "Moderate", price: 27.99, shipping: "$2.99", inStock: true, rating: 3.6, totalReviews: 36, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
     ]
   },
   {
     id: 7,
     name: "Designer Leather Jacket",
+    shortDescription: "Genuine leather jacket with modern design\nPerfect for all seasons and occasions",
     image: "/placeholder.svg",
     rating: 4.8,
-    reviewCount: 94,
+    overallRating: 4.6,
+    reviewCount: 194,
     category: "fashion",
     bestPrice: 199.99,
     merchants: [
-      { id: 14, name: "Leather Luxe", creditTag: "Amazing", price: 219.99, shipping: "Free", inStock: true },
-      { id: 15, name: "Fashion Elite", creditTag: "Excellent", price: 199.99, shipping: "Free", inStock: true }
+      { id: 19, name: "Leather Luxe", creditTag: "Excellent", price: 219.99, shipping: "Free", inStock: true, rating: 4.9, totalReviews: 67, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 20, name: "Fashion Elite", creditTag: "Good", price: 199.99, shipping: "Free", inStock: true, rating: 4.5, totalReviews: 78, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 21, name: "StyleCraft", creditTag: "Moderate", price: 209.99, shipping: "$5.99", inStock: true, rating: 4.4, totalReviews: 49, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
     ]
   },
+  // ... keep existing code for other products with similar updates
+
+  // Everyday Essentials - New Category
   {
-    id: 8,
-    name: "Running Sneakers Athletic",
-    image: "/placeholder.svg",
-    rating: 4.5,
-    reviewCount: 456,
-    category: "fashion",
-    bestPrice: 79.99,
-    merchants: [
-      { id: 16, name: "SportsWear Pro", creditTag: "Good", price: 89.99, shipping: "$4.99", inStock: true },
-      { id: 17, name: "Athletic Gear", creditTag: "Excellent", price: 79.99, shipping: "Free", inStock: true }
-    ]
-  },
-  {
-    id: 9,
-    name: "Classic Denim Jeans",
-    image: "/placeholder.svg",
-    rating: 4.3,
-    reviewCount: 321,
-    category: "fashion",
-    bestPrice: 49.99,
-    merchants: [
-      { id: 18, name: "Denim Depot", creditTag: "Moderate", price: 59.99, shipping: "$2.99", inStock: true },
-      { id: 19, name: "Casual Wear", creditTag: "Good", price: 49.99, shipping: "Free", inStock: true }
-    ]
-  },
-  {
-    id: 10,
-    name: "Elegant Evening Dress",
+    id: 26,
+    name: "Organic Coffee Beans Premium",
+    shortDescription: "Single-origin organic coffee beans\nRich flavor with sustainable sourcing",
     image: "/placeholder.svg",
     rating: 4.7,
-    reviewCount: 167,
-    category: "fashion",
-    bestPrice: 129.99,
-    merchants: [
-      { id: 20, name: "Elegant Attire", creditTag: "Amazing", price: 149.99, shipping: "Free", inStock: true },
-      { id: 21, name: "Formal Fashion", creditTag: "Excellent", price: 129.99, shipping: "$5.99", inStock: true }
-    ]
-  },
-
-  // Beauty Products
-  {
-    id: 11,
-    name: "Anti-Aging Serum Vitamin C",
-    image: "/placeholder.svg",
-    rating: 4.6,
+    overallRating: 4.5,
     reviewCount: 234,
-    category: "beauty",
-    bestPrice: 34.99,
+    category: "everyday-essentials",
+    bestPrice: 19.99,
     merchants: [
-      { id: 22, name: "Beauty Essentials", creditTag: "Excellent", price: 39.99, shipping: "Free", inStock: true },
-      { id: 23, name: "Skincare Pro", creditTag: "Good", price: 34.99, shipping: "$2.99", inStock: true }
+      { id: 78, name: "Coffee Masters", creditTag: "Excellent", price: 22.99, shipping: "Free", inStock: true, rating: 4.8, totalReviews: 89, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 79, name: "Bean Source", creditTag: "Good", price: 19.99, shipping: "$2.99", inStock: true, rating: 4.5, totalReviews: 67, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 80, name: "Daily Brew", creditTag: "Moderate", price: 21.99, shipping: "$1.99", inStock: true, rating: 4.2, totalReviews: 78, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
     ]
   },
   {
-    id: 12,
-    name: "Professional Makeup Palette",
+    id: 27,
+    name: "Eco-Friendly Dish Soap",
+    shortDescription: "Natural dish soap with plant-based ingredients\nEffective cleaning without harsh chemicals",
+    image: "/placeholder.svg",
+    rating: 4.3,
+    overallRating: 4.1,
+    reviewCount: 167,
+    category: "everyday-essentials",
+    bestPrice: 8.99,
+    merchants: [
+      { id: 81, name: "Green Clean", creditTag: "Excellent", price: 9.99, shipping: "$1.99", inStock: true, rating: 4.5, totalReviews: 56, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 82, name: "EcoHome", creditTag: "Good", price: 8.99, shipping: "Free", inStock: true, rating: 4.2, totalReviews: 67, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 83, name: "Natural Solutions", creditTag: "Moderate", price: 9.49, shipping: "$0.99", inStock: true, rating: 3.8, totalReviews: 44, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
+    ]
+  },
+  {
+    id: 28,
+    name: "Bamboo Toothbrush Set",
+    shortDescription: "Sustainable bamboo toothbrushes pack of 4\nBiodegradable with soft bristles",
+    image: "/placeholder.svg",
+    rating: 4.5,
+    overallRating: 4.3,
+    reviewCount: 123,
+    category: "everyday-essentials",
+    bestPrice: 12.99,
+    merchants: [
+      { id: 84, name: "Eco Dental", creditTag: "Excellent", price: 14.99, shipping: "Free", inStock: true, rating: 4.6, totalReviews: 45, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 85, name: "Green Living", creditTag: "Good", price: 12.99, shipping: "$1.99", inStock: true, rating: 4.3, totalReviews: 56, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 86, name: "Sustainable Life", creditTag: "Moderate", price: 13.99, shipping: "$2.99", inStock: true, rating: 4.0, totalReviews: 22, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
+    ]
+  },
+  {
+    id: 29,
+    name: "Multi-Purpose Cleaning Spray",
+    shortDescription: "All-natural multi-surface cleaning spray\nSafe for family and pets with fresh scent",
     image: "/placeholder.svg",
     rating: 4.4,
+    overallRating: 4.2,
     reviewCount: 189,
-    category: "beauty",
-    bestPrice: 59.99,
+    category: "everyday-essentials",
+    bestPrice: 6.99,
     merchants: [
-      { id: 24, name: "Makeup Masters", creditTag: "Amazing", price: 64.99, shipping: "Free", inStock: true },
-      { id: 25, name: "Cosmetic Corner", creditTag: "Excellent", price: 59.99, shipping: "$3.99", inStock: true }
+      { id: 87, name: "Pure Clean", creditTag: "Excellent", price: 7.99, shipping: "$1.99", inStock: true, rating: 4.5, totalReviews: 67, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 88, name: "Home Essentials", creditTag: "Good", price: 6.99, shipping: "Free", inStock: true, rating: 4.3, totalReviews: 78, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 89, name: "Clean & Safe", creditTag: "Moderate", price: 7.49, shipping: "$0.99", inStock: true, rating: 3.8, totalReviews: 44, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
     ]
   },
   {
-    id: 13,
-    name: "Organic Face Moisturizer",
-    image: "/placeholder.svg",
-    rating: 4.5,
-    reviewCount: 298,
-    category: "beauty",
-    bestPrice: 28.99,
-    merchants: [
-      { id: 26, name: "Natural Beauty", creditTag: "Good", price: 32.99, shipping: "$1.99", inStock: true },
-      { id: 27, name: "Organic Care", creditTag: "Excellent", price: 28.99, shipping: "Free", inStock: true }
-    ]
-  },
-  {
-    id: 14,
-    name: "Hair Growth Shampoo",
-    image: "/placeholder.svg",
-    rating: 4.2,
-    reviewCount: 156,
-    category: "beauty",
-    bestPrice: 19.99,
-    merchants: [
-      { id: 28, name: "Hair Solutions", creditTag: "Moderate", price: 24.99, shipping: "$2.99", inStock: true },
-      { id: 29, name: "Wellness Store", creditTag: "Good", price: 19.99, shipping: "Free", inStock: true }
-    ]
-  },
-  {
-    id: 15,
-    name: "Luxury Perfume Collection",
-    image: "/placeholder.svg",
-    rating: 4.8,
-    reviewCount: 78,
-    category: "beauty",
-    bestPrice: 89.99,
-    merchants: [
-      { id: 30, name: "Fragrance House", creditTag: "Amazing", price: 99.99, shipping: "Free", inStock: true },
-      { id: 31, name: "Scent Studio", creditTag: "Excellent", price: 89.99, shipping: "$4.99", inStock: true }
-    ]
-  },
-
-  // Furniture
-  {
-    id: 16,
-    name: "Modern Office Chair Ergonomic",
-    image: "/placeholder.svg",
-    rating: 4.5,
-    reviewCount: 345,
-    category: "furniture",
-    bestPrice: 199.99,
-    merchants: [
-      { id: 32, name: "Office Furniture Pro", creditTag: "Excellent", price: 219.99, shipping: "Free", inStock: true },
-      { id: 33, name: "Workspace Solutions", creditTag: "Good", price: 199.99, shipping: "$15.99", inStock: true }
-    ]
-  },
-  {
-    id: 17,
-    name: "Wooden Coffee Table",
-    image: "/placeholder.svg",
-    rating: 4.3,
-    reviewCount: 123,
-    category: "furniture",
-    bestPrice: 149.99,
-    merchants: [
-      { id: 34, name: "Wood Craft", creditTag: "Amazing", price: 169.99, shipping: "Free", inStock: true },
-      { id: 35, name: "Home Decor Plus", creditTag: "Excellent", price: 149.99, shipping: "$12.99", inStock: true }
-    ]
-  },
-  {
-    id: 18,
-    name: "Luxury Bed Frame King Size",
-    image: "/placeholder.svg",
-    rating: 4.7,
-    reviewCount: 89,
-    category: "furniture",
-    bestPrice: 599.99,
-    merchants: [
-      { id: 36, name: "Bedroom Essentials", creditTag: "Good", price: 649.99, shipping: "$35.99", inStock: true },
-      { id: 37, name: "Sleep Comfort", creditTag: "Excellent", price: 599.99, shipping: "Free", inStock: true }
-    ]
-  },
-  {
-    id: 19,
-    name: "Dining Table Set 6 Chairs",
-    image: "/placeholder.svg",
-    rating: 4.4,
-    reviewCount: 234,
-    category: "furniture",
-    bestPrice: 799.99,
-    merchants: [
-      { id: 38, name: "Dining Room Pro", creditTag: "Excellent", price: 849.99, shipping: "Free", inStock: true },
-      { id: 39, name: "Furniture Warehouse", creditTag: "Good", price: 799.99, shipping: "$25.99", inStock: true }
-    ]
-  },
-  {
-    id: 20,
-    name: "Comfortable Recliner Sofa",
+    id: 30,
+    name: "Reusable Water Bottle Steel",
+    shortDescription: "Insulated stainless steel water bottle 32oz\nKeeps drinks cold for 24h, hot for 12h",
     image: "/placeholder.svg",
     rating: 4.6,
-    reviewCount: 167,
-    category: "furniture",
-    bestPrice: 899.99,
+    overallRating: 4.4,
+    reviewCount: 278,
+    category: "everyday-essentials",
+    bestPrice: 24.99,
     merchants: [
-      { id: 40, name: "Living Room Luxe", creditTag: "Amazing", price: 949.99, shipping: "Free", inStock: true },
-      { id: 41, name: "Comfort Furniture", creditTag: "Excellent", price: 899.99, shipping: "$19.99", inStock: true }
-    ]
-  },
-
-  // Sports
-  {
-    id: 21,
-    name: "Professional Tennis Racket",
-    image: "/placeholder.svg",
-    rating: 4.5,
-    reviewCount: 178,
-    category: "sports",
-    bestPrice: 119.99,
-    merchants: [
-      { id: 42, name: "Sports Authority", creditTag: "Excellent", price: 129.99, shipping: "Free", inStock: true },
-      { id: 43, name: "Tennis Pro Shop", creditTag: "Amazing", price: 119.99, shipping: "$4.99", inStock: true }
-    ]
-  },
-  {
-    id: 22,
-    name: "Adjustable Dumbbells Set",
-    image: "/placeholder.svg",
-    rating: 4.7,
-    reviewCount: 456,
-    category: "sports",
-    bestPrice: 299.99,
-    merchants: [
-      { id: 44, name: "Fitness Equipment", creditTag: "Good", price: 329.99, shipping: "$19.99", inStock: true },
-      { id: 45, name: "Gym Gear Pro", creditTag: "Excellent", price: 299.99, shipping: "Free", inStock: true }
-    ]
-  },
-  {
-    id: 23,
-    name: "Yoga Mat Premium Quality",
-    image: "/placeholder.svg",
-    rating: 4.3,
-    reviewCount: 234,
-    category: "sports",
-    bestPrice: 39.99,
-    merchants: [
-      { id: 46, name: "Yoga Essentials", creditTag: "Moderate", price: 44.99, shipping: "$2.99", inStock: true },
-      { id: 47, name: "Wellness Gear", creditTag: "Good", price: 39.99, shipping: "Free", inStock: true }
-    ]
-  },
-  {
-    id: 24,
-    name: "Mountain Bike 21 Speed",
-    image: "/placeholder.svg",
-    rating: 4.6,
-    reviewCount: 89,
-    category: "sports",
-    bestPrice: 449.99,
-    merchants: [
-      { id: 48, name: "Bike World", creditTag: "Amazing", price: 479.99, shipping: "Free", inStock: true },
-      { id: 49, name: "Cycling Pro", creditTag: "Excellent", price: 449.99, shipping: "$24.99", inStock: true }
-    ]
-  },
-  {
-    id: 25,
-    name: "Swimming Goggles Anti-Fog",
-    image: "/placeholder.svg",
-    rating: 4.2,
-    reviewCount: 123,
-    category: "sports",
-    bestPrice: 19.99,
-    merchants: [
-      { id: 50, name: "Swim Gear", creditTag: "Good", price: 24.99, shipping: "$1.99", inStock: true },
-      { id: 51, name: "Aqua Sports", creditTag: "Excellent", price: 19.99, shipping: "Free", inStock: true }
+      { id: 90, name: "Hydro Pro", creditTag: "Excellent", price: 27.99, shipping: "Free", inStock: true, rating: 4.7, totalReviews: 89, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 91, name: "Bottle Shop", creditTag: "Good", price: 24.99, shipping: "$2.99", inStock: true, rating: 4.4, totalReviews: 123, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 92, name: "Eco Bottles", creditTag: "Moderate", price: 26.99, shipping: "$1.99", inStock: true, rating: 4.1, totalReviews: 66, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
     ]
   }
 ];
@@ -382,7 +273,7 @@ const ProductGrid = ({ onProductClick, selectedCategory }: ProductGridProps) => 
       case 'price-high':
         return b.bestPrice - a.bestPrice;
       case 'rating':
-        return b.rating - a.rating;
+        return b.overallRating - a.overallRating;
       case 'reviews':
         return b.reviewCount - a.reviewCount;
       default:
@@ -392,7 +283,15 @@ const ProductGrid = ({ onProductClick, selectedCategory }: ProductGridProps) => 
 
   const getCategoryTitle = () => {
     if (!selectedCategory) return 'All Products';
-    return selectedCategory.charAt(0).toUpperCase() + selectedCategory.slice(1);
+    const categoryMap: { [key: string]: string } = {
+      'electronics': 'Electronics',
+      'fashion': 'Fashion',
+      'beauty': 'Beauty Products',
+      'furniture': 'Furniture',
+      'sports': 'Sports',
+      'everyday-essentials': 'Everyday Essentials'
+    };
+    return categoryMap[selectedCategory] || selectedCategory;
   };
 
   return (
@@ -452,14 +351,14 @@ const ProductGrid = ({ onProductClick, selectedCategory }: ProductGridProps) => 
                         <Star 
                           key={i}
                           className={`h-4 w-4 ${
-                            i < Math.floor(product.rating) 
+                            i < Math.floor(product.overallRating) 
                               ? 'text-yellow-400 fill-current' 
                               : 'text-gray-300'
                           }`}
                         />
                       ))}
                       <span className="ml-2 text-sm text-gray-600 font-medium">
-                        {product.rating} ({product.reviewCount})
+                        {product.overallRating.toFixed(1)} ({product.reviewCount})
                       </span>
                     </div>
                   </div>
