@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ArrowLeft, Star, Badge, ShoppingCart, Plus, Minus, Shield, Truck, CheckCircle, AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -68,64 +67,41 @@ const ProductDetail = ({ product, onBack, onAddToCart }: ProductDetailProps) => 
   const [selectedMerchant, setSelectedMerchant] = useState(product.merchants[0]);
   const [reviewSort, setReviewSort] = useState('credibility');
 
-  const productWithDetails = {
-    ...product,
-    description: "High-quality product with premium features and excellent build quality. Perfect for everyday use with advanced technology and user-friendly design. Backed by warranty and excellent customer support.",
-    reviews: [
-      {
-        id: 1,
-        customerName: "Sarah M.",
-        credibilityScore: 92,
-        rating: 5,
-        comment: "Absolutely love this product! Exceeded my expectations in every way. The quality is outstanding and delivery was super fast.",
-        date: "2024-06-10",
-        verifiedPurchase: true,
-        merchantId: selectedMerchant.id
-      },
-      {
-        id: 2,
-        customerName: "Mike R.",
-        credibilityScore: 78,
-        rating: 4,
-        comment: "Great quality and fast shipping. Highly recommend! Only minor issue was the packaging could be better.",
-        date: "2024-06-08",
-        verifiedPurchase: true,
-        merchantId: selectedMerchant.id
-      },
-      {
-        id: 3,
-        customerName: "Jennifer K.",
-        credibilityScore: 88,
-        rating: 5,
-        comment: "Perfect product, exactly as described. Will buy again! Customer service was also very helpful when I had questions.",
-        date: "2024-06-05",
-        verifiedPurchase: false,
-        merchantId: selectedMerchant.id
-      },
-      {
-        id: 4,
-        customerName: "Alex T.",
-        credibilityScore: 45,
-        rating: 1,
-        comment: "Terrible product, broke after one day. Don't waste your money on this garbage.",
-        date: "2024-06-03",
-        verifiedPurchase: false,
-        merchantId: selectedMerchant.id
-      },
-      {
-        id: 5,
-        customerName: "Emily C.",
-        credibilityScore: 95,
-        rating: 4,
-        comment: "Very good product with excellent build quality. Minor issues with setup but overall satisfied.",
-        date: "2024-06-01",
-        verifiedPurchase: true,
-        merchantId: selectedMerchant.id
-      }
-    ]
+  // Generate unique reviews for each merchant
+  const generateMerchantReviews = (merchantId: number): Review[] => {
+    const reviewTemplates = [
+      { rating: 5, comment: "Outstanding product quality! Exceeded all my expectations. Will definitely buy again from this seller." },
+      { rating: 4, comment: "Very good product with excellent build quality. Fast shipping and great customer service." },
+      { rating: 5, comment: "Perfect item exactly as described. Amazing seller with quick delivery and secure packaging." },
+      { rating: 3, comment: "Decent product for the price. Some minor issues but overall satisfied with the purchase." },
+      { rating: 4, comment: "Good quality product. Took a bit longer to arrive but worth the wait. Recommended!" },
+      { rating: 5, comment: "Absolutely love this! Great value for money and excellent customer support." },
+      { rating: 2, comment: "Product was okay but not what I expected. Packaging could be better." },
+      { rating: 4, comment: "Solid product with good features. Seller was responsive and helpful." },
+      { rating: 5, comment: "Amazing quality! Fast shipping and exactly what I ordered. Five stars!" },
+      { rating: 1, comment: "Terrible experience. Product broke after one day. Waste of money." }
+    ];
+
+    const customerNames = [
+      "Sarah M.", "Mike R.", "Jennifer K.", "Alex T.", "Emily C.",
+      "David L.", "Rachel S.", "John D.", "Lisa P.", "Mark W."
+    ];
+
+    return reviewTemplates.map((template, index) => ({
+      id: merchantId * 100 + index + 1,
+      customerName: customerNames[index],
+      credibilityScore: Math.floor(Math.random() * 60) + 40, // 40-100 range
+      rating: template.rating,
+      comment: template.comment,
+      date: new Date(Date.now() - Math.random() * 10000000000).toISOString().split('T')[0],
+      verifiedPurchase: Math.random() > 0.3,
+      merchantId: merchantId
+    }));
   };
 
-  const sortedReviews = [...(productWithDetails.reviews || [])].sort((a, b) => {
+  const currentMerchantReviews = generateMerchantReviews(selectedMerchant.id);
+
+  const sortedReviews = [...currentMerchantReviews].sort((a, b) => {
     switch (reviewSort) {
       case 'credibility':
         return b.credibilityScore - a.credibilityScore;
@@ -155,8 +131,8 @@ const ProductDetail = ({ product, onBack, onAddToCart }: ProductDetailProps) => 
         <div className="space-y-4">
           <div className="aspect-square bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl overflow-hidden">
             <img 
-              src={productWithDetails.image} 
-              alt={productWithDetails.name}
+              src={product.image} 
+              alt={product.name}
               className="w-full h-full object-cover"
             />
           </div>
@@ -165,7 +141,7 @@ const ProductDetail = ({ product, onBack, onAddToCart }: ProductDetailProps) => 
         <div className="space-y-8">
           <div>
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              {productWithDetails.name}
+              {product.name}
             </h1>
             
             <div className="flex items-center mb-6">
@@ -174,20 +150,20 @@ const ProductDetail = ({ product, onBack, onAddToCart }: ProductDetailProps) => 
                   <Star 
                     key={i}
                     className={`h-6 w-6 ${
-                      i < Math.floor(productWithDetails.rating) 
+                      i < Math.floor(product.rating) 
                         ? 'text-yellow-400 fill-current' 
                         : 'text-gray-300'
                     }`}
                   />
                 ))}
                 <span className="ml-3 text-lg text-gray-600 font-medium">
-                  {productWithDetails.rating} ({productWithDetails.reviewCount} reviews)
+                  {product.rating} ({product.reviewCount} reviews)
                 </span>
               </div>
             </div>
 
             <p className="text-gray-700 text-lg leading-relaxed mb-8">
-              {productWithDetails.description}
+              High-quality product with premium features and excellent build quality. Perfect for everyday use with advanced technology and user-friendly design. Backed by warranty and excellent customer support.
             </p>
           </div>
 
@@ -195,7 +171,7 @@ const ProductDetail = ({ product, onBack, onAddToCart }: ProductDetailProps) => 
           <div className="space-y-4">
             <h3 className="text-xl font-bold text-gray-900">Choose Your Merchant</h3>
             <div className="space-y-3">
-              {productWithDetails.merchants.map((merchant) => (
+              {product.merchants.map((merchant) => (
                 <Card 
                   key={merchant.id}
                   className={`cursor-pointer transition-all duration-200 hover:shadow-md ${
@@ -259,7 +235,7 @@ const ProductDetail = ({ product, onBack, onAddToCart }: ProductDetailProps) => 
             </div>
             
             <Button 
-              onClick={() => onAddToCart(productWithDetails)}
+              onClick={() => onAddToCart(product)}
               className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-8 rounded-lg shadow-md hover:shadow-lg transition-all duration-200"
               disabled={!selectedMerchant.inStock}
             >
@@ -275,7 +251,9 @@ const ProductDetail = ({ product, onBack, onAddToCart }: ProductDetailProps) => 
       {/* Reviews Section */}
       <div>
         <div className="flex items-center justify-between mb-8">
-          <h2 className="text-3xl font-bold text-gray-900">Customer Reviews</h2>
+          <h2 className="text-3xl font-bold text-gray-900">
+            Customer Reviews for {selectedMerchant.name}
+          </h2>
           <Select value={reviewSort} onValueChange={setReviewSort}>
             <SelectTrigger className="w-64">
               <SelectValue placeholder="Sort reviews by" />

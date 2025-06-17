@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { ShoppingBag, Smartphone, Laptop, Headphones, Watch, Camera, GamepadIcon, Speaker } from 'lucide-react';
+import { ShoppingBag, Smartphone, Heart, Sofa, Dumbbell, Camera } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -23,48 +23,40 @@ const categories: Category[] = [
     name: 'Electronics',
     icon: Smartphone,
     description: 'Latest gadgets and devices',
-    productCount: 127,
+    productCount: 5,
     gradient: 'from-blue-500 to-purple-600'
   },
   {
-    id: 'computers',
-    name: 'Computers',
-    icon: Laptop,
-    description: 'Laptops, desktops & accessories',
-    productCount: 89,
-    gradient: 'from-green-500 to-teal-600'
+    id: 'fashion',
+    name: 'Fashion',
+    icon: ShoppingBag,
+    description: 'Trendy clothing and accessories',
+    productCount: 5,
+    gradient: 'from-pink-500 to-rose-600'
   },
   {
-    id: 'audio',
-    name: 'Audio',
-    icon: Headphones,
-    description: 'Headphones, speakers & sound',
-    productCount: 156,
+    id: 'beauty',
+    name: 'Beauty Products',
+    icon: Heart,
+    description: 'Skincare, makeup & wellness',
+    productCount: 5,
     gradient: 'from-purple-500 to-pink-600'
   },
   {
-    id: 'wearables',
-    name: 'Wearables',
-    icon: Watch,
-    description: 'Smart watches & fitness trackers',
-    productCount: 67,
+    id: 'furniture',
+    name: 'Furniture',
+    icon: Sofa,
+    description: 'Home & office furniture',
+    productCount: 5,
     gradient: 'from-orange-500 to-red-600'
   },
   {
-    id: 'photography',
-    name: 'Photography',
-    icon: Camera,
-    description: 'Cameras, lenses & accessories',
-    productCount: 94,
-    gradient: 'from-indigo-500 to-blue-600'
-  },
-  {
-    id: 'gaming',
-    name: 'Gaming',
-    icon: GamepadIcon,
-    description: 'Gaming gear & accessories',
-    productCount: 203,
-    gradient: 'from-red-500 to-orange-600'
+    id: 'sports',
+    name: 'Sports',
+    icon: Dumbbell,
+    description: 'Sports equipment & fitness gear',
+    productCount: 5,
+    gradient: 'from-green-500 to-teal-600'
   }
 ];
 
