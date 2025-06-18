@@ -1,6 +1,6 @@
 
 import { useState } from 'react';
-import { ShoppingCart, Search, Menu, X } from 'lucide-react';
+import { ShoppingCart, Search, Menu, X, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -8,9 +8,10 @@ interface HeaderProps {
   cartCount: number;
   onCartClick: () => void;
   onLogoClick: () => void;
+  onProfileClick: () => void;
 }
 
-const Header = ({ cartCount, onCartClick, onLogoClick }: HeaderProps) => {
+const Header = ({ cartCount, onCartClick, onLogoClick, onProfileClick }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -41,16 +42,16 @@ const Header = ({ cartCount, onCartClick, onLogoClick }: HeaderProps) => {
 
           {/* Search Bar - Desktop */}
           <div className="hidden md:flex flex-1 max-w-2xl mx-8">
-            <div className="relative w-full">
+            <div className="relative w-full flex">
               <Input
                 type="text"
                 placeholder="Search for products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-12 pl-4 pr-12 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full h-12 pl-4 pr-4 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
               <Button 
-                className="absolute right-0 top-0 h-12 px-6 bg-blue-600 hover:bg-blue-700 text-white border-0 rounded-l-none rounded-r-lg"
+                className="h-12 px-6 bg-blue-600 hover:bg-blue-700 text-white border-0 rounded-l-none rounded-r-lg flex-shrink-0"
               >
                 <Search className="h-5 w-5" />
               </Button>
@@ -67,6 +68,15 @@ const Header = ({ cartCount, onCartClick, onLogoClick }: HeaderProps) => {
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
+
+            {/* Profile Button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onProfileClick}
+            >
+              <User className="h-6 w-6" />
             </Button>
 
             {/* Cart Button */}
@@ -105,16 +115,16 @@ const Header = ({ cartCount, onCartClick, onLogoClick }: HeaderProps) => {
         {isMenuOpen && (
           <div className="md:hidden border-t border-gray-200 py-4 space-y-4">
             {/* Mobile Search */}
-            <div className="relative">
+            <div className="relative flex">
               <Input
                 type="text"
                 placeholder="Search for products..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-12 pl-4 pr-12 border border-gray-300 rounded-l-lg"
+                className="w-full h-12 pl-4 pr-4 border border-gray-300 rounded-l-lg"
               />
               <Button 
-                className="absolute right-0 top-0 h-12 px-6 bg-blue-600 hover:bg-blue-700 text-white border-0 rounded-l-none rounded-r-lg"
+                className="h-12 px-6 bg-blue-600 hover:bg-blue-700 text-white border-0 rounded-l-none rounded-r-lg flex-shrink-0"
               >
                 <Search className="h-5 w-5" />
               </Button>
