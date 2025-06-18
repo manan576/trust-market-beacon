@@ -1,24 +1,39 @@
 
-import { ArrowLeft, Star, Shield, Package, MessageSquare } from 'lucide-react';
+import { ArrowLeft, Star, Shield, Package, MessageSquare, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useCustomer, useCustomerOrders, useCustomerReviews } from '../hooks/useCustomer';
 
 interface CustomerProfileProps {
   onBack: () => void;
 }
 
 const CustomerProfile = ({ onBack }: CustomerProfileProps) => {
-  // Mock customer data
-  const customer = {
-    name: 'John Smith',
-    email: 'john.smith@email.com',
-    credibilityScore: 87,
-    joinDate: 'March 2023',
-    totalOrders: 24,
-    totalReviews: 18
-  };
+  const { data: customer, isLoading: customerLoading, error: customerError } = useCustomer();
+  const { data: orders = [], isLoading: ordersLoading } = useCustomerOrders();
+  const { data: reviews = [], isLoading: reviewsLoading } = useCustomerReviews();
+
+  if (customerLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
+        <span className="ml-2 text-gray-600">Loading profile...</span>
+      </div>
+    );
+  }
+
+  if (customerError || !customer) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-red-600 text-lg">Error loading profile. Please try again.</p>
+        <Button onClick={onBack} className="mt-4 bg-orange-500 hover:bg-orange-600">
+          Go Back
+        </Button>
+      </div>
+    );
+  }
 
   const getCredibilityBadge = (score: number) => {
     if (score >= 80) return { label: 'Excellent', color: 'bg-green-400 text-white' };
@@ -27,102 +42,6 @@ const CustomerProfile = ({ onBack }: CustomerProfileProps) => {
   };
 
   const credibilityBadge = getCredibilityBadge(customer.credibilityScore);
-
-  // Mock past orders
-  const pastOrders = [
-    {
-      id: 'ORD-001',
-      productName: 'Wireless Bluetooth Headphones Pro',
-      orderDate: '2024-01-15',
-      price: 79.99,
-      status: 'Delivered',
-      merchant: 'AudioTech Pro'
-    },
-    {
-      id: 'ORD-002',
-      productName: 'Smart Phone 5G Latest Model',
-      orderDate: '2024-01-08',
-      price: 849.99,
-      status: 'Delivered',
-      merchant: 'MobileTech'
-    },
-    {
-      id: 'ORD-003',
-      productName: 'Premium Cotton T-Shirt',
-      orderDate: '2023-12-22',
-      price: 29.99,
-      status: 'Delivered',
-      merchant: 'Fashion Forward'
-    },
-    {
-      id: 'ORD-004',
-      productName: 'Organic Coffee Beans Premium',
-      orderDate: '2023-12-15',
-      price: 22.99,
-      status: 'Delivered',
-      merchant: 'Coffee Masters'
-    },
-    {
-      id: 'ORD-005',
-      productName: 'Reusable Water Bottle Steel',
-      orderDate: '2023-11-28',
-      price: 27.99,
-      status: 'Delivered',
-      merchant: 'Hydro Pro'
-    },
-    {
-      id: 'ORD-006',
-      productName: 'Designer Leather Jacket',
-      orderDate: '2023-11-10',
-      price: 219.99,
-      status: 'Delivered',
-      merchant: 'Leather Luxe'
-    }
-  ];
-
-  // Mock past reviews
-  const pastReviews = [
-    {
-      id: 'REV-001',
-      productName: 'Wireless Bluetooth Headphones Pro',
-      rating: 5,
-      comment: 'Excellent sound quality and battery life. Highly recommend!',
-      date: '2024-01-18',
-      merchant: 'AudioTech Pro'
-    },
-    {
-      id: 'REV-002',
-      productName: 'Smart Phone 5G Latest Model',
-      rating: 4,
-      comment: 'Great phone with fast performance. Camera could be better.',
-      date: '2024-01-12',
-      merchant: 'MobileTech'
-    },
-    {
-      id: 'REV-003',
-      productName: 'Premium Cotton T-Shirt',
-      rating: 5,
-      comment: 'Very soft and comfortable. Perfect fit and great quality.',
-      date: '2023-12-28',
-      merchant: 'Fashion Forward'
-    },
-    {
-      id: 'REV-004',
-      productName: 'Organic Coffee Beans Premium',
-      rating: 4,
-      comment: 'Rich flavor and good aroma. A bit pricey but worth it.',
-      date: '2023-12-20',
-      merchant: 'Coffee Masters'
-    },
-    {
-      id: 'REV-005',
-      productName: 'Reusable Water Bottle Steel',
-      rating: 5,
-      comment: 'Keeps drinks cold for hours. Perfect for gym and work.',
-      date: '2023-12-02',
-      merchant: 'Hydro Pro'
-    }
-  ];
 
   return (
     <div className="max-w-4xl mx-auto">
@@ -197,23 +116,34 @@ const CustomerProfile = ({ onBack }: CustomerProfileProps) => {
               <CardTitle>Recent Orders</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {pastOrders.map((order) => (
-                  <div key={order.id} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div className="flex-1">
-                      <h4 className="font-medium text-gray-900">{order.productName}</h4>
-                      <p className="text-sm text-gray-600">Order #{order.id} • {order.merchant}</p>
-                      <p className="text-sm text-gray-500">{new Date(order.orderDate).toLocaleDateString()}</p>
-                    </div>
-                    <div className="text-right">
-                      <div className="font-bold text-lg">${order.price}</div>
-                      <Badge variant="secondary" className="bg-green-100 text-green-800">
-                        {order.status}
-                      </Badge>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              {ordersLoading ? (
+                <div className="flex items-center justify-center py-4">
+                  <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
+                  <span className="ml-2">Loading orders...</span>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {orders.length > 0 ? (
+                    orders.map((order) => (
+                      <div key={order.id} className="flex items-center justify-between p-4 border rounded-lg">
+                        <div className="flex-1">
+                          <h4 className="font-medium text-gray-900">{order.productName}</h4>
+                          <p className="text-sm text-gray-600">Order #{order.id} • {order.merchantName}</p>
+                          <p className="text-sm text-gray-500">{new Date(order.orderDate).toLocaleDateString()}</p>
+                        </div>
+                        <div className="text-right">
+                          <div className="font-bold text-lg">${order.price}</div>
+                          <Badge variant="secondary" className="bg-green-100 text-green-800">
+                            {order.status}
+                          </Badge>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-500 text-center py-4">No orders found.</p>
+                  )}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
@@ -224,34 +154,45 @@ const CustomerProfile = ({ onBack }: CustomerProfileProps) => {
               <CardTitle>My Product Reviews</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {pastReviews.map((review) => (
-                  <div key={review.id} className="p-4 border rounded-lg">
-                    <div className="flex items-start justify-between mb-3">
-                      <div>
-                        <h4 className="font-medium text-gray-900">{review.productName}</h4>
-                        <p className="text-sm text-gray-600">{review.merchant}</p>
-                      </div>
-                      <div className="text-right">
-                        <div className="flex items-center mb-1">
-                          {[...Array(5)].map((_, i) => (
-                            <Star 
-                              key={i} 
-                              className={`h-4 w-4 ${
-                                i < review.rating 
-                                  ? 'text-yellow-400 fill-current' 
-                                  : 'text-gray-300'
-                              }`} 
-                            />
-                          ))}
+              {reviewsLoading ? (
+                <div className="flex items-center justify-center py-4">
+                  <Loader2 className="h-6 w-6 animate-spin text-orange-500" />
+                  <span className="ml-2">Loading reviews...</span>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {reviews.length > 0 ? (
+                    reviews.map((review) => (
+                      <div key={review.id} className="p-4 border rounded-lg">
+                        <div className="flex items-start justify-between mb-3">
+                          <div>
+                            <h4 className="font-medium text-gray-900">{review.productName}</h4>
+                            <p className="text-sm text-gray-600">{review.merchantName}</p>
+                          </div>
+                          <div className="text-right">
+                            <div className="flex items-center mb-1">
+                              {[...Array(5)].map((_, i) => (
+                                <Star 
+                                  key={i} 
+                                  className={`h-4 w-4 ${
+                                    i < review.rating 
+                                      ? 'text-yellow-400 fill-current' 
+                                      : 'text-gray-300'
+                                  }`} 
+                                />
+                              ))}
+                            </div>
+                            <p className="text-sm text-gray-500">{new Date(review.date).toLocaleDateString()}</p>
+                          </div>
                         </div>
-                        <p className="text-sm text-gray-500">{new Date(review.date).toLocaleDateString()}</p>
+                        <p className="text-gray-700">{review.comment}</p>
                       </div>
-                    </div>
-                    <p className="text-gray-700">{review.comment}</p>
-                  </div>
-                ))}
-              </div>
+                    ))
+                  ) : (
+                    <p className="text-gray-500 text-center py-4">No reviews found.</p>
+                  )}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
