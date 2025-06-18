@@ -1,53 +1,124 @@
-
 import { useState } from 'react';
-import { ArrowLeft, Star, Shield, Truck, Gift, ShoppingCart, Zap, Loader2 } from 'lucide-react';
+import { ArrowLeft, Star, Shield, Truck, Gift, ShoppingCart, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useProduct, Product, Merchant } from '../hooks/useProducts';
+
+interface Merchant {
+  id: string;
+  name: string;
+  creditTag: string;
+  rating: number;
+  totalReviews: number;
+  price: number;
+  originalPrice?: number;
+  deliveryDate: string;
+  offers: string[];
+}
+
+interface Review {
+  id: string;
+  customerName: string;
+  rating: number;
+  comment: string;
+  date: Date;
+  credibilityScore: number;
+  merchantId: string;
+}
+
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  shortDescription: string;
+  image: string;
+  category: string;
+  rating: number;
+  overallRating: number;
+  merchants: Merchant[];
+  reviews: Review[];
+}
 
 interface ProductDetailProps {
-  productId: number;
+  product: Product;
   onBack: () => void;
   onAddToCart?: (product: Product, merchant: Merchant) => void;
 }
 
-const ProductDetail = ({ productId, onBack, onAddToCart }: ProductDetailProps) => {
-  const { data: product, isLoading, error } = useProduct(productId);
-  const [selectedMerchant, setSelectedMerchant] = useState<Merchant | null>(null);
+// Generate unique reviews for each merchant
+const generateMerchantReviews = (productId: string, merchants: Merchant[]): Review[] => {
+  const allReviews: Review[] = [];
+  
+  const customerNames = [
+    'Alice Johnson', 'Bob Smith', 'Carol Williams', 'David Brown', 'Emma Davis',
+    'Frank Miller', 'Grace Wilson', 'Henry Moore', 'Ivy Taylor', 'Jack Anderson',
+    'Karen Thomas', 'Liam Jackson', 'Mia White', 'Noah Harris', 'Olivia Martin',
+    'Paul Thompson', 'Quinn Garcia', 'Ruby Martinez', 'Sam Robinson', 'Tina Clark',
+    'Uma Rodriguez', 'Victor Lewis', 'Wendy Lee', 'Xavier Walker', 'Yara Hall',
+    'Zoe Allen', 'Adam Young', 'Bella King', 'Chris Wright', 'Diana Lopez'
+  ];
+
+  const comments = [
+    'Excellent product! Exactly what I was looking for.',
+    'Great quality and fast shipping. Very satisfied.',
+    'Good value for money. Would recommend to others.',
+    'Product works as described. Happy with my purchase.',
+    'Outstanding quality and customer service.',
+    'Fast delivery and well packaged. Product is perfect.',
+    'Exceeded my expectations. Will buy again.',
+    'Solid product, good build quality.',
+    'Very pleased with this purchase. Great seller.',
+    'Perfect item, exactly as described in listing.',
+    'Amazing product quality. Highly recommend!',
+    'Good product but shipping took a while.',
+    'Decent quality for the price point.',
+    'Works well, no complaints so far.',
+    'Impressive quality and attention to detail.',
+    'Great customer service and quick response.',
+    'Product arrived quickly and in perfect condition.',
+    'Very happy with this purchase. Five stars!',
+    'Good product, meets all my requirements.',
+    'Excellent value and great communication from seller.'
+  ];
+
+  merchants.forEach((merchant, merchantIndex) => {
+    for (let i = 0; i < 10; i++) {
+      const reviewIndex = (merchantIndex * 10) + i;
+      const customerIndex = reviewIndex % customerNames.length;
+      const commentIndex = reviewIndex % comments.length;
+      
+      // Generate ratings that average to the merchant's rating
+      const baseRating = merchant.rating;
+      const variation = (Math.random() - 0.5) * 2; // -1 to 1
+      let rating = Math.round(baseRating + variation);
+      rating = Math.max(1, Math.min(5, rating)); // Clamp between 1 and 5
+      
+      allReviews.push({
+        id: `${productId}-${merchant.id}-${i}`,
+        customerName: customerNames[customerIndex],
+        rating: rating,
+        comment: comments[commentIndex],
+        date: new Date(Date.now() - Math.random() * 365 * 24 * 60 * 60 * 1000),
+        credibilityScore: Math.random(),
+        merchantId: merchant.id
+      });
+    }
+  });
+
+  return allReviews;
+};
+
+const ProductDetail = ({ product, onBack, onAddToCart }: ProductDetailProps) => {
+  const [selectedMerchant, setSelectedMerchant] = useState(product.merchants[0]);
   const [reviewSort, setReviewSort] = useState('newest');
 
-  // Set initial merchant when product loads
-  if (product && product.merchants.length > 0 && !selectedMerchant) {
-    setSelectedMerchant(product.merchants[0]);
-  }
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="h-8 w-8 animate-spin text-orange-500" />
-        <span className="ml-2 text-gray-600">Loading product details...</span>
-      </div>
-    );
-  }
-
-  if (error || !product) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-red-600 text-lg">Error loading product details. Please try again.</p>
-        <Button onClick={onBack} className="mt-4 bg-orange-500 hover:bg-orange-600">
-          Go Back
-        </Button>
-      </div>
-    );
-  }
-
+  // Generate all reviews for all merchants
+  const allReviews = generateMerchantReviews(product.id, product.merchants);
+  
   // Filter reviews for current merchant
-  const merchantReviews = product.reviews?.filter(review => 
-    review.merchantId === selectedMerchant?.id
-  ) || [];
+  const merchantReviews = allReviews.filter(review => review.merchantId === selectedMerchant.id);
 
   const getCreditTagColor = (creditTag: string) => {
     switch (creditTag) {
@@ -82,7 +153,7 @@ const ProductDetail = ({ productId, onBack, onAddToCart }: ProductDetailProps) =
     }
   };
 
-  const sortReviews = (reviews: any[], sortBy: string) => {
+  const sortReviews = (reviews: Review[], sortBy: string) => {
     switch (sortBy) {
       case 'newest':
         return [...reviews].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -100,7 +171,7 @@ const ProductDetail = ({ productId, onBack, onAddToCart }: ProductDetailProps) =
   const sortedReviews = sortReviews(merchantReviews, reviewSort);
 
   const handleAddToCart = (merchant: Merchant) => {
-    if (onAddToCart && product) {
+    if (onAddToCart) {
       onAddToCart(product, merchant);
     }
   };
@@ -147,102 +218,100 @@ const ProductDetail = ({ productId, onBack, onAddToCart }: ProductDetailProps) =
           </div>
 
           {/* Merchant Selection */}
-          {product.merchants.length > 0 && (
-            <Card>
-              <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Choose Merchant</h3>
-                <div className="space-y-3">
-                  {product.merchants.map((merchant) => (
-                    <div 
-                      key={merchant.id}
-                      className={`p-4 border rounded-lg cursor-pointer transition-all ${
-                        selectedMerchant?.id === merchant.id 
-                          ? 'border-blue-500 bg-blue-50' 
-                          : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                      onClick={() => setSelectedMerchant(merchant)}
-                    >
-                      <div className="flex justify-between items-start mb-3">
-                        <div>
-                          <div className="flex items-center space-x-3 mb-2">
-                            <h4 className="font-medium">{merchant.name}</h4>
-                            <Badge 
-                              className={`${getCreditTagColor(merchant.creditTag)} border-0 font-medium px-3 py-1 rounded-full`}
-                            >
-                              <Shield className="h-3 w-3 mr-1" />
-                              {merchant.creditTag}
-                            </Badge>
-                          </div>
-                          <div className="flex items-center mb-2">
-                            <div className="flex items-center">
-                              {[...Array(5)].map((_, i) => (
-                                <Star 
-                                  key={i} 
-                                  className={`h-4 w-4 ${
-                                    i < Math.floor(merchant.rating) 
-                                      ? 'text-yellow-400 fill-current' 
-                                      : 'text-gray-300'
-                                  }`} 
-                                />
-                              ))}
-                            </div>
-                            <span className="text-sm text-gray-600 ml-2">
-                              {merchant.rating} from this merchant ({merchant.totalReviews} reviews)
-                            </span>
-                          </div>
+          <Card>
+            <CardContent className="p-6">
+              <h3 className="text-lg font-semibold mb-4">Choose Merchant</h3>
+              <div className="space-y-3">
+                {product.merchants.map((merchant) => (
+                  <div 
+                    key={merchant.id}
+                    className={`p-4 border rounded-lg cursor-pointer transition-all ${
+                      selectedMerchant.id === merchant.id 
+                        ? 'border-blue-500 bg-blue-50' 
+                        : 'border-gray-200 hover:border-gray-300'
+                    }`}
+                    onClick={() => setSelectedMerchant(merchant)}
+                  >
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <div className="flex items-center space-x-3 mb-2">
+                          <h4 className="font-medium">{merchant.name}</h4>
+                          <Badge 
+                            className={`${getCreditTagColor(merchant.creditTag)} border-0 font-medium px-3 py-1 rounded-full`}
+                          >
+                            <Shield className="h-3 w-3 mr-1" />
+                            {merchant.creditTag}
+                          </Badge>
                         </div>
-                        <div className="text-right">
-                          <div className="text-2xl font-bold text-green-600">
-                            ${merchant.price}
+                        <div className="flex items-center mb-2">
+                          <div className="flex items-center">
+                            {[...Array(5)].map((_, i) => (
+                              <Star 
+                                key={i} 
+                                className={`h-4 w-4 ${
+                                  i < Math.floor(merchant.rating) 
+                                    ? 'text-yellow-400 fill-current' 
+                                    : 'text-gray-300'
+                                }`} 
+                              />
+                            ))}
                           </div>
-                          {merchant.originalPrice && (
-                            <div className="text-sm text-gray-500 line-through">
-                              ${merchant.originalPrice}
-                            </div>
-                          )}
+                          <span className="text-sm text-gray-600 ml-2">
+                            {merchant.rating} from this merchant ({merchant.totalReviews} reviews)
+                          </span>
                         </div>
                       </div>
-
-                      {/* Offers */}
-                      <div className="mb-3">
-                        <div className="flex flex-wrap gap-2">
-                          {merchant.offers.map((offer, index) => (
-                            <span key={index} className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded flex items-center">
-                              <Gift className="h-3 w-3 mr-1" />
-                              {offer}
-                            </span>
-                          ))}
+                      <div className="text-right">
+                        <div className="text-2xl font-bold text-green-600">
+                          ${merchant.price}
                         </div>
-                      </div>
-
-                      {/* Delivery Date */}
-                      <div className="mb-4">
-                        <div className="flex items-center text-sm text-gray-600">
-                          <Truck className="h-4 w-4 mr-2" />
-                          Delivery by {merchant.deliveryDate}
-                        </div>
-                      </div>
-
-                      {/* Action Buttons */}
-                      <div className="flex space-x-3">
-                        <Button 
-                          className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
-                          onClick={() => handleAddToCart(merchant)}
-                        >
-                          <ShoppingCart className="h-4 w-4 mr-2" />
-                          Add to Cart
-                        </Button>
-                        <Button className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white">
-                          <Zap className="h-4 w-4 mr-2" />
-                          Buy Now
-                        </Button>
+                        {merchant.originalPrice && (
+                          <div className="text-sm text-gray-500 line-through">
+                            ${merchant.originalPrice}
+                          </div>
+                        )}
                       </div>
                     </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          )}
+
+                    {/* Offers */}
+                    <div className="mb-3">
+                      <div className="flex flex-wrap gap-2">
+                        {merchant.offers.map((offer, index) => (
+                          <span key={index} className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded flex items-center">
+                            <Gift className="h-3 w-3 mr-1" />
+                            {offer}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Delivery Date */}
+                    <div className="mb-4">
+                      <div className="flex items-center text-sm text-gray-600">
+                        <Truck className="h-4 w-4 mr-2" />
+                        Delivery by {merchant.deliveryDate}
+                      </div>
+                    </div>
+
+                    {/* Action Buttons */}
+                    <div className="flex space-x-3">
+                      <Button 
+                        className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
+                        onClick={() => handleAddToCart(merchant)}
+                      >
+                        <ShoppingCart className="h-4 w-4 mr-2" />
+                        Add to Cart
+                      </Button>
+                      <Button className="flex-1 bg-yellow-500 hover:bg-yellow-600 text-white">
+                        <Zap className="h-4 w-4 mr-2" />
+                        Buy Now
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
 
@@ -258,7 +327,7 @@ const ProductDetail = ({ productId, onBack, onAddToCart }: ProductDetailProps) =
             <CardContent className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-2xl font-bold">
-                  Reviews {selectedMerchant ? `for ${selectedMerchant.name}` : ''}
+                  Reviews for {selectedMerchant.name}
                 </h3>
                 <Select value={reviewSort} onValueChange={setReviewSort}>
                   <SelectTrigger className="w-48">
@@ -274,50 +343,46 @@ const ProductDetail = ({ productId, onBack, onAddToCart }: ProductDetailProps) =
               </div>
 
               <div className="space-y-4">
-                {sortedReviews.length > 0 ? (
-                  sortedReviews.map((review) => (
-                    <div key={review.id} className="border-b pb-4">
-                      <div className="flex items-start justify-between mb-2">
-                        <div className="flex items-center space-x-3">
-                          <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                            <span className="font-medium text-gray-600">
-                              {review.customerName.charAt(0)}
-                            </span>
+                {sortedReviews.map((review) => (
+                  <div key={review.id} className="border-b pb-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                          <span className="font-medium text-gray-600">
+                            {review.customerName.charAt(0)}
+                          </span>
+                        </div>
+                        <div>
+                          <div className="flex items-center space-x-2">
+                            <span className="font-medium">{review.customerName}</span>
+                            <Badge 
+                              variant="secondary"
+                              className={`${getCredibilityColor(review.credibilityScore)} text-white text-xs`}
+                            >
+                              {getCredibilityTag(review.credibilityScore)}
+                            </Badge>
                           </div>
-                          <div>
-                            <div className="flex items-center space-x-2">
-                              <span className="font-medium">{review.customerName}</span>
-                              <Badge 
-                                variant="secondary"
-                                className={`${getCredibilityColor(review.credibilityScore)} text-white text-xs`}
-                              >
-                                {getCredibilityTag(review.credibilityScore)}
-                              </Badge>
-                            </div>
-                            <div className="flex items-center mt-1">
-                              {[...Array(5)].map((_, i) => (
-                                <Star 
-                                  key={i} 
-                                  className={`h-4 w-4 ${
-                                    i < review.rating 
-                                      ? 'text-yellow-400 fill-current' 
-                                      : 'text-gray-300'
-                                  }`} 
-                                />
-                              ))}
-                              <span className="text-sm text-gray-500 ml-2">
-                                {new Date(review.date).toLocaleDateString()}
-                              </span>
-                            </div>
+                          <div className="flex items-center mt-1">
+                            {[...Array(5)].map((_, i) => (
+                              <Star 
+                                key={i} 
+                                className={`h-4 w-4 ${
+                                  i < review.rating 
+                                    ? 'text-yellow-400 fill-current' 
+                                    : 'text-gray-300'
+                                }`} 
+                              />
+                            ))}
+                            <span className="text-sm text-gray-500 ml-2">
+                              {new Date(review.date).toLocaleDateString()}
+                            </span>
                           </div>
                         </div>
                       </div>
-                      <p className="text-gray-700 ml-13">{review.comment}</p>
                     </div>
-                  ))
-                ) : (
-                  <p className="text-gray-500">No reviews available for this merchant.</p>
-                )}
+                    <p className="text-gray-700 ml-13">{review.comment}</p>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
@@ -342,7 +407,7 @@ const ProductDetail = ({ productId, onBack, onAddToCart }: ProductDetailProps) =
                 </div>
                 <div>
                   <h4 className="font-medium text-gray-900">Total Reviews</h4>
-                  <p className="text-gray-600">{product.reviewCount} customer reviews</p>
+                  <p className="text-gray-600">{selectedMerchant.totalReviews} customer reviews</p>
                 </div>
               </div>
             </CardContent>

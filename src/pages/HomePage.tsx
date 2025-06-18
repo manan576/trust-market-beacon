@@ -3,13 +3,13 @@ import { useState } from 'react';
 import { ShoppingBag, Smartphone, Heart, Sofa, Dumbbell, Coffee } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useProducts } from '../hooks/useProducts';
 
 interface Category {
   id: string;
   name: string;
   icon: React.ComponentType<any>;
   description: string;
+  productCount: number;
   gradient: string;
 }
 
@@ -23,6 +23,7 @@ const categories: Category[] = [
     name: 'Electronics',
     icon: Smartphone,
     description: 'Latest gadgets and devices',
+    productCount: 5,
     gradient: 'from-blue-500 to-purple-600'
   },
   {
@@ -30,6 +31,7 @@ const categories: Category[] = [
     name: 'Fashion',
     icon: ShoppingBag,
     description: 'Trendy clothing and accessories',
+    productCount: 5,
     gradient: 'from-pink-500 to-rose-600'
   },
   {
@@ -37,6 +39,7 @@ const categories: Category[] = [
     name: 'Beauty Products',
     icon: Heart,
     description: 'Skincare, makeup & wellness',
+    productCount: 5,
     gradient: 'from-purple-500 to-pink-600'
   },
   {
@@ -44,6 +47,7 @@ const categories: Category[] = [
     name: 'Furniture',
     icon: Sofa,
     description: 'Home & office furniture',
+    productCount: 5,
     gradient: 'from-orange-500 to-red-600'
   },
   {
@@ -51,6 +55,7 @@ const categories: Category[] = [
     name: 'Sports',
     icon: Dumbbell,
     description: 'Sports equipment & fitness gear',
+    productCount: 5,
     gradient: 'from-green-500 to-teal-600'
   },
   {
@@ -58,18 +63,12 @@ const categories: Category[] = [
     name: 'Everyday Essentials',
     icon: Coffee,
     description: 'Daily necessities & household items',
+    productCount: 5,
     gradient: 'from-amber-500 to-orange-600'
   }
 ];
 
 const HomePage = ({ onCategorySelect }: HomePageProps) => {
-  // Fetch all products to get counts per category
-  const { data: allProducts = [] } = useProducts();
-
-  const getCategoryProductCount = (categoryId: string) => {
-    return allProducts.filter(product => product.category === categoryId).length;
-  };
-
   return (
     <div className="space-y-12">
       {/* Hero Section */}
@@ -106,8 +105,6 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((category) => {
             const Icon = category.icon;
-            const productCount = getCategoryProductCount(category.id);
-            
             return (
               <Card 
                 key={category.id}
@@ -130,7 +127,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
                   <div className="p-6">
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600 font-medium">
-                        {productCount} products
+                        {category.productCount} products
                       </span>
                       <Button 
                         variant="ghost" 
