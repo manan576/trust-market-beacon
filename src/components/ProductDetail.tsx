@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { ArrowLeft, Star, Shield, Truck, Gift, ShoppingCart, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -45,6 +44,7 @@ interface Product {
 interface ProductDetailProps {
   product: Product;
   onBack: () => void;
+  onAddToCart?: (product: Product, merchant: Merchant) => void;
 }
 
 // Generate unique reviews for each merchant
@@ -110,7 +110,7 @@ const generateMerchantReviews = (productId: string, merchants: Merchant[]): Revi
   return allReviews;
 };
 
-const ProductDetail = ({ product, onBack }: ProductDetailProps) => {
+const ProductDetail = ({ product, onBack, onAddToCart }: ProductDetailProps) => {
   const [selectedMerchant, setSelectedMerchant] = useState(product.merchants[0]);
   const [reviewSort, setReviewSort] = useState('newest');
 
@@ -169,6 +169,12 @@ const ProductDetail = ({ product, onBack }: ProductDetailProps) => {
   };
 
   const sortedReviews = sortReviews(merchantReviews, reviewSort);
+
+  const handleAddToCart = (merchant: Merchant) => {
+    if (onAddToCart) {
+      onAddToCart(product, merchant);
+    }
+  };
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -289,7 +295,10 @@ const ProductDetail = ({ product, onBack }: ProductDetailProps) => {
 
                     {/* Action Buttons */}
                     <div className="flex space-x-3">
-                      <Button className="flex-1 bg-orange-500 hover:bg-orange-600 text-white">
+                      <Button 
+                        className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
+                        onClick={() => handleAddToCart(merchant)}
+                      >
                         <ShoppingCart className="h-4 w-4 mr-2" />
                         Add to Cart
                       </Button>

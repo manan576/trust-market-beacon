@@ -34,6 +34,7 @@ interface Product {
 interface ProductGridProps {
   onProductClick: (product: Product) => void;
   selectedCategory?: string;
+  searchQuery?: string;
 }
 
 // Generate different delivery dates
@@ -406,9 +407,9 @@ const products: Product[] = [
     ]
   },
 
-  // Everyday Essentials - keep existing code
+  // Everyday Essentials - 5 products
   {
-    id: 26,
+    id: 49,
     name: "Organic Coffee Beans Premium",
     shortDescription: "Single-origin organic coffee beans\nRich flavor with sustainable sourcing",
     image: "/placeholder.svg",
@@ -418,20 +419,95 @@ const products: Product[] = [
     category: "everyday-essentials",
     bestPrice: 19.99,
     merchants: [
-      { id: 78, name: "Coffee Masters", creditTag: "Excellent", price: 22.99, shipping: "Free", inStock: true, rating: 4.8, totalReviews: 89, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
-      { id: 79, name: "Bean Source", creditTag: "Good", price: 19.99, shipping: "$2.99", inStock: true, rating: 4.5, totalReviews: 67, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
-      { id: 80, name: "Daily Brew", creditTag: "Moderate", price: 21.99, shipping: "$1.99", inStock: true, rating: 4.2, totalReviews: 78, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
+      { id: 147, name: "Coffee Masters", creditTag: "Excellent", price: 22.99, shipping: "Free", inStock: true, rating: 4.8, totalReviews: 89, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 148, name: "Bean Source", creditTag: "Good", price: 19.99, shipping: "$2.99", inStock: true, rating: 4.5, totalReviews: 67, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 149, name: "Daily Brew", creditTag: "Moderate", price: 21.99, shipping: "$1.99", inStock: true, rating: 4.2, totalReviews: 78, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
     ]
   },
-  // ... keep existing everyday essentials products
+  {
+    id: 50,
+    name: "Eco-Friendly Dish Soap",
+    shortDescription: "Plant-based dish soap with natural ingredients\nEffective cleaning without harsh chemicals",
+    image: "/placeholder.svg",
+    rating: 4.4,
+    overallRating: 4.2,
+    reviewCount: 189,
+    category: "everyday-essentials",
+    bestPrice: 8.99,
+    merchants: [
+      { id: 150, name: "Green Clean", creditTag: "Good", price: 9.99, shipping: "$1.99", inStock: true, rating: 4.5, totalReviews: 67, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 151, name: "EcoSoap Co", creditTag: "Excellent", price: 8.99, shipping: "Free", inStock: true, rating: 4.2, totalReviews: 56, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 152, name: "Natural Clean", creditTag: "Moderate", price: 9.49, shipping: "$0.99", inStock: true, rating: 3.9, totalReviews: 66, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
+    ]
+  },
+  {
+    id: 51,
+    name: "Bamboo Toilet Paper 12-Pack",
+    shortDescription: "Sustainable bamboo toilet paper ultra-soft\nBiodegradable and plastic-free packaging",
+    image: "/placeholder.svg",
+    rating: 4.3,
+    overallRating: 4.1,
+    reviewCount: 156,
+    category: "everyday-essentials",
+    bestPrice: 24.99,
+    merchants: [
+      { id: 153, name: "Bamboo Plus", creditTag: "Excellent", price: 27.99, shipping: "Free", inStock: true, rating: 4.4, totalReviews: 56, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 154, name: "Eco Paper", creditTag: "Good", price: 24.99, shipping: "$2.99", inStock: true, rating: 4.1, totalReviews: 45, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 155, name: "Green Paper Co", creditTag: "Moderate", price: 26.99, shipping: "$1.99", inStock: true, rating: 3.8, totalReviews: 55, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
+    ]
+  },
+  {
+    id: 52,
+    name: "Organic Honey Raw Unfiltered",
+    shortDescription: "Pure raw honey from local beekeepers\nNo additives or processing for natural taste",
+    image: "/placeholder.svg",
+    rating: 4.6,
+    overallRating: 4.4,
+    reviewCount: 198,
+    category: "everyday-essentials",
+    bestPrice: 16.99,
+    merchants: [
+      { id: 156, name: "Honey Farm", creditTag: "Good", price: 18.99, shipping: "$1.99", inStock: true, rating: 4.7, totalReviews: 78, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 157, name: "Pure Honey Co", creditTag: "Excellent", price: 16.99, shipping: "Free", inStock: true, rating: 4.4, totalReviews: 67, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 158, name: "Natural Honey", creditTag: "Moderate", price: 17.99, shipping: "$0.99", inStock: true, rating: 4.1, totalReviews: 53, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
+    ]
+  },
+  {
+    id: 53,
+    name: "Stainless Steel Water Bottle",
+    shortDescription: "Double-wall insulated water bottle 32oz\nKeeps drinks cold 24h, hot 12h, leak-proof",
+    image: "/placeholder.svg",
+    rating: 4.5,
+    overallRating: 4.3,
+    reviewCount: 167,
+    category: "everyday-essentials",
+    bestPrice: 22.99,
+    merchants: [
+      { id: 159, name: "Bottle Pro", creditTag: "Excellent", price: 25.99, shipping: "Free", inStock: true, rating: 4.6, totalReviews: 67, deliveryDate: generateDeliveryDate(0), offers: generateOffers(0) },
+      { id: 160, name: "Steel Bottles", creditTag: "Good", price: 22.99, shipping: "$1.99", inStock: true, rating: 4.2, totalReviews: 56, deliveryDate: generateDeliveryDate(1), offers: generateOffers(1) },
+      { id: 161, name: "Hydration Plus", creditTag: "Moderate", price: 24.99, shipping: "$2.99", inStock: true, rating: 4.0, totalReviews: 44, deliveryDate: generateDeliveryDate(2), offers: generateOffers(2) }
+    ]
+  }
 ];
 
-const ProductGrid = ({ onProductClick, selectedCategory }: ProductGridProps) => {
+const ProductGrid = ({ onProductClick, selectedCategory, searchQuery }: ProductGridProps) => {
   const [sortBy, setSortBy] = useState('relevance');
   
-  const filteredProducts = selectedCategory 
-    ? products.filter(product => product.category === selectedCategory)
-    : products;
+  let filteredProducts = products;
+
+  // Filter by category
+  if (selectedCategory) {
+    filteredProducts = products.filter(product => product.category === selectedCategory);
+  }
+
+  // Filter by search query
+  if (searchQuery) {
+    filteredProducts = products.filter(product =>
+      product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.shortDescription.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
     switch (sortBy) {
@@ -449,6 +525,7 @@ const ProductGrid = ({ onProductClick, selectedCategory }: ProductGridProps) => 
   });
 
   const getCategoryTitle = () => {
+    if (searchQuery) return `Search results for "${searchQuery}"`;
     if (!selectedCategory) return 'All Products';
     const categoryMap: { [key: string]: string } = {
       'electronics': 'Electronics',
@@ -555,6 +632,12 @@ const ProductGrid = ({ onProductClick, selectedCategory }: ProductGridProps) => 
           );
         })}
       </div>
+
+      {sortedProducts.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-gray-600 text-lg">No products found matching your criteria.</p>
+        </div>
+      )}
     </div>
   );
 };
