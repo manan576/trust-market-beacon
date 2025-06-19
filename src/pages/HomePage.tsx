@@ -1,15 +1,15 @@
-
 import { useState } from 'react';
 import { ShoppingBag, Smartphone, Heart, Sofa, Dumbbell, Coffee } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { useCategories } from '@/hooks/useCategories';
 
 interface Category {
   id: string;
   name: string;
-  icon: React.ComponentType<any>;
+  icon: string;
   description: string;
-  productCount: number;
+  product_count: number;
   gradient: string;
 }
 
@@ -17,58 +17,28 @@ interface HomePageProps {
   onCategorySelect: (categoryId: string) => void;
 }
 
-const categories: Category[] = [
-  {
-    id: 'electronics',
-    name: 'Electronics',
-    icon: Smartphone,
-    description: 'Latest gadgets and devices',
-    productCount: 5,
-    gradient: 'from-blue-500 to-purple-600'
-  },
-  {
-    id: 'fashion',
-    name: 'Fashion',
-    icon: ShoppingBag,
-    description: 'Trendy clothing and accessories',
-    productCount: 5,
-    gradient: 'from-pink-500 to-rose-600'
-  },
-  {
-    id: 'beauty',
-    name: 'Beauty Products',
-    icon: Heart,
-    description: 'Skincare, makeup & wellness',
-    productCount: 5,
-    gradient: 'from-purple-500 to-pink-600'
-  },
-  {
-    id: 'furniture',
-    name: 'Furniture',
-    icon: Sofa,
-    description: 'Home & office furniture',
-    productCount: 5,
-    gradient: 'from-orange-500 to-red-600'
-  },
-  {
-    id: 'sports',
-    name: 'Sports',
-    icon: Dumbbell,
-    description: 'Sports equipment & fitness gear',
-    productCount: 5,
-    gradient: 'from-green-500 to-teal-600'
-  },
-  {
-    id: 'everyday-essentials',
-    name: 'Everyday Essentials',
-    icon: Coffee,
-    description: 'Daily necessities & household items',
-    productCount: 5,
-    gradient: 'from-amber-500 to-orange-600'
-  }
-];
+const iconMap: { [key: string]: React.ComponentType<any> } = {
+  'Smartphone': Smartphone,
+  'ShoppingBag': ShoppingBag,
+  'Heart': Heart,
+  'Sofa': Sofa,
+  'Dumbbell': Dumbbell,
+  'Coffee': Coffee
+};
 
 const HomePage = ({ onCategorySelect }: HomePageProps) => {
+  const { data: categories = [], isLoading } = useCategories();
+
+  if (isLoading) {
+    return (
+      <div className="space-y-12">
+        <div className="text-center">
+          <p className="text-xl text-gray-600">Loading categories...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-12">
       {/* Hero Section */}
@@ -104,7 +74,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {categories.map((category) => {
-            const Icon = category.icon;
+            const Icon = iconMap[category.icon] || Coffee;
             return (
               <Card 
                 key={category.id}
@@ -120,14 +90,14 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
                       <div className="bg-white/20 backdrop-blur-sm rounded-full w-16 h-16 flex items-center justify-center mb-4">
                         <Icon className="h-8 w-8 text-white" />
                       </div>
-                      <h3 className="text-2xl font-bold mb-2">{category.name}</h3>
+                      <h3 className="text-2xl font-bold mb-2 capitalize">{category.name.replace('-', ' ')}</h3>
                       <p className="text-white/90 mb-4">{category.description}</p>
                     </div>
                   </div>
                   <div className="p-6">
                     <div className="flex items-center justify-between">
                       <span className="text-gray-600 font-medium">
-                        {category.productCount} products
+                        {category.product_count} products
                       </span>
                       <Button 
                         variant="ghost" 

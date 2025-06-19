@@ -1,14 +1,16 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '../components/Header';
 import HomePage from './HomePage';
 import ProductGrid from '../components/ProductGrid';
 import ProductDetail from '../components/ProductDetail';
 import CustomerProfile from '../components/CustomerProfile';
 import Cart from '../components/Cart';
+import { seedSampleData } from '../utils/seedData';
+import { Product, ProductMerchant } from '@/types/database';
 
 interface CartItem {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
@@ -21,19 +23,30 @@ interface CartItem {
 
 const Index = () => {
   const [currentView, setCurrentView] = useState('home');
-  const [selectedProduct, setSelectedProduct] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [showCart, setShowCart] = useState(false);
 
-  const handleCategorySelect = (categoryId) => {
+  // Seed data on first load
+  useEffect(() => {
+    const hasSeededData = localStorage.getItem('hasSeededData');
+    if (!hasSeededData) {
+      seedSampleData().then(() => {
+        localStorage.setItem('hasSeededData', 'true');
+        console.log('Sample data has been seeded!');
+      });
+    }
+  }, []);
+
+  const handleCategorySelect = (categoryId: string) => {
     setSelectedCategory(categoryId);
     setCurrentView('category');
     setSearchQuery('');
   };
 
-  const handleProductClick = (product) => {
+  const handleProductClick = (product: Product) => {
     setSelectedProduct(product);
     setCurrentView('product');
   };
@@ -67,14 +80,14 @@ const Index = () => {
     setShowCart(false);
   };
 
-  const handleAddToCart = (product, merchant) => {
+  const handleAddToCart = (product: Product, merchant: ProductMerchant) => {
     const existingItem = cartItems.find(item => 
-      item.id === product.id && item.merchant.name === merchant.name
+      item.id === product.id && item.merchant.name === merchant.merchant?.name
     );
 
     if (existingItem) {
       setCartItems(cartItems.map(item =>
-        item.id === product.id && item.merchant.name === merchant.name
+        item.id === product.id && item.merchant.name === merchant.merchant?.name
           ? { ...item, quantity: item.quantity + 1 }
           : item
       ));
@@ -82,19 +95,19 @@ const Index = () => {
       const newItem: CartItem = {
         id: product.id,
         name: product.name,
-        price: merchant.price,
-        image: product.image,
+        price: merchant.price || 0,
+        image: product.image || '/placeholder.svg',
         quantity: 1,
         merchant: {
-          name: merchant.name,
-          creditTag: merchant.creditTag
+          name: merchant.merchant?.name || '',
+          creditTag: merchant.merchant?.credit_tag || ''
         }
       };
       setCartItems([...cartItems, newItem]);
     }
   };
 
-  const handleUpdateQuantity = (productId: number, quantity: number) => {
+  const handleUpdateQuantity = (productId: string, quantity: number) => {
     if (quantity <= 0) {
       handleRemoveFromCart(productId);
     } else {
@@ -104,7 +117,7 @@ const Index = () => {
     }
   };
 
-  const handleRemoveFromCart = (productId: number) => {
+  const handleRemoveFromCart = (productId: string) => {
     setCartItems(cartItems.filter(item => item.id !== productId));
   };
 
@@ -146,7 +159,7 @@ const Index = () => {
         {!showCart && (currentView === 'category' || currentView === 'search') && (
           <ProductGrid 
             onProductClick={handleProductClick}
-            selectedCategory={selectedCategory}
+            selectedCategory={selectedCategory || undefined}
             searchQuery={searchQuery}
           />
         )}
