@@ -52,22 +52,27 @@ const ProductDetail = ({ product: initialProduct, onBack, onAddToCart }: Product
     }
   };
 
-  const getCredibilityTag = (credibilityScore: number) => {
-    if (credibilityScore > 0.75) {
+    const getCredibilityTag = (credibilityScore: number) => {
+    if (credibilityScore > 70) {
       return 'High Credibility';
-    } else if (credibilityScore > 0.5) {
+    } else if (credibilityScore > 50) {
+      return 'Good Credibility';
+    } else if(credibilityScore > 30){
       return 'Moderate Credibility';
     } else {
-      return 'Low Credibility';
+      return 'Suspicious';
     }
+
   };
 
   const getCredibilityColor = (credibilityScore: number) => {
-    if (credibilityScore > 0.75) {
+    if (credibilityScore > 70) {
       return 'bg-green-500';
-    } else if (credibilityScore > 0.5) {
+    } else if (credibilityScore > 50) {
       return 'bg-blue-500';
-    } else {
+    } else if(credibilityScore > 30){
+      return 'bg-orange-500';
+    } else{
       return 'bg-red-500';
     }
   };
