@@ -40,8 +40,8 @@ const Index = () => {
     }
   }, []);
 
-  const handleCategorySelect = (categoryId: string) => {
-    setSelectedCategory(categoryId);
+  const handleCategorySelect = (categoryName: string) => {
+    setSelectedCategory(categoryName);
     setCurrentView('category');
     setSearchQuery('');
   };

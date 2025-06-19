@@ -19,7 +19,19 @@ export const useProducts = (categoryId?: string, searchQuery?: string) => {
         `);
 
       if (categoryId) {
-        query = query.eq('category_id', categoryId);
+        // First, get the category by name to find its UUID
+        const { data: category } = await supabase
+          .from('categories')
+          .select('id')
+          .eq('name', categoryId)
+          .single();
+        
+        if (category) {
+          query = query.eq('category_id', category.id);
+        } else {
+          // If category not found, return empty array
+          return [];
+        }
       }
 
       if (searchQuery) {

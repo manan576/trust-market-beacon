@@ -1,20 +1,12 @@
+
 import { useState } from 'react';
 import { ShoppingBag, Smartphone, Heart, Sofa, Dumbbell, Coffee } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useCategories } from '@/hooks/useCategories';
 
-interface Category {
-  id: string;
-  name: string;
-  icon: string;
-  description: string;
-  product_count: number;
-  gradient: string;
-}
-
 interface HomePageProps {
-  onCategorySelect: (categoryId: string) => void;
+  onCategorySelect: (categoryName: string) => void;
 }
 
 const iconMap: { [key: string]: React.ComponentType<any> } = {
@@ -79,7 +71,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
               <Card 
                 key={category.id}
                 className="group cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-0 overflow-hidden bg-white"
-                onClick={() => onCategorySelect(category.id)}
+                onClick={() => onCategorySelect(category.name)}
               >
                 <CardContent className="p-0">
                   <div className={`bg-gradient-to-br ${category.gradient} p-8 text-white relative overflow-hidden`}>
