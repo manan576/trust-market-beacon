@@ -5,7 +5,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 
 interface CartItem {
-  id: number;
+  id: string;
   name: string;
   price: number;
   image: string;
@@ -19,8 +19,8 @@ interface CartItem {
 interface CartProps {
   items: CartItem[];
   onClose: () => void;
-  onUpdateQuantity: (productId: number, quantity: number) => void;
-  onRemove: (productId: number) => void;
+  onUpdateQuantity: (productId: string, quantity: number) => void;
+  onRemove: (productId: string) => void;
 }
 
 const Cart = ({ items, onClose, onUpdateQuantity, onRemove }: CartProps) => {
