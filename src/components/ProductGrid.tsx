@@ -124,11 +124,11 @@ const ProductGrid = ({ onProductClick, selectedCategory, searchQuery }: ProductG
                     <div className="flex items-center justify-between">
                       <div>
                         <span className="text-2xl font-bold text-gray-900">
-                          ${product.best_price || 0}
+                          ₹{product.best_price || 0}
                         </span>
                         {bestMerchant?.original_price && (
                           <span className="ml-2 text-sm text-gray-500 line-through">
-                            ${bestMerchant.original_price}
+                            ₹{bestMerchant.original_price}
                           </span>
                         )}
                       </div>
