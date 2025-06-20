@@ -39,6 +39,51 @@ export type Database = {
         }
         Relationships: []
       }
+      "Customer Tower": {
+        Row: {
+          customer_id: string
+          customer_name: string
+          customer_tenure_months: number | null
+          predicted_score: number | null
+          purchase_score: string | null
+          purchase_value_rupees: number | null
+          review_authenticity_binary: string | null
+          review_text: string | null
+          star_rating: number | null
+          target: string | null
+          tenure_score: string | null
+          verified_purchase: string | null
+        }
+        Insert: {
+          customer_id: string
+          customer_name: string
+          customer_tenure_months?: number | null
+          predicted_score?: number | null
+          purchase_score?: string | null
+          purchase_value_rupees?: number | null
+          review_authenticity_binary?: string | null
+          review_text?: string | null
+          star_rating?: number | null
+          target?: string | null
+          tenure_score?: string | null
+          verified_purchase?: string | null
+        }
+        Update: {
+          customer_id?: string
+          customer_name?: string
+          customer_tenure_months?: number | null
+          predicted_score?: number | null
+          purchase_score?: string | null
+          purchase_value_rupees?: number | null
+          review_authenticity_binary?: string | null
+          review_text?: string | null
+          star_rating?: number | null
+          target?: string | null
+          tenure_score?: string | null
+          verified_purchase?: string | null
+        }
+        Relationships: []
+      }
       customers: {
         Row: {
           created_at: string | null
@@ -269,6 +314,7 @@ export type Database = {
       }
       reviews: {
         Row: {
+          badge: string | null
           comment: string | null
           created_at: string | null
           credibility_score: number | null
@@ -278,8 +324,10 @@ export type Database = {
           product_id: string | null
           rating: number | null
           review_date: string | null
+          verified_purchase: boolean | null
         }
         Insert: {
+          badge?: string | null
           comment?: string | null
           created_at?: string | null
           credibility_score?: number | null
@@ -289,8 +337,10 @@ export type Database = {
           product_id?: string | null
           rating?: number | null
           review_date?: string | null
+          verified_purchase?: boolean | null
         }
         Update: {
+          badge?: string | null
           comment?: string | null
           created_at?: string | null
           credibility_score?: number | null
@@ -300,6 +350,7 @@ export type Database = {
           product_id?: string | null
           rating?: number | null
           review_date?: string | null
+          verified_purchase?: boolean | null
         }
         Relationships: [
           {

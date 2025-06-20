@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { ArrowLeft, Star, Shield, Truck, Gift, ShoppingCart, Zap } from 'lucide-react';
+import { ArrowLeft, Star, Shield, Truck, Gift, ShoppingCart, Zap, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useProduct } from '@/hooks/useProducts';
 import { Product, ProductMerchant, Review } from '@/types/database';
+import ReviewForm from './ReviewForm';
 
 interface ProductDetailProps {
   product: Product;
@@ -16,9 +17,10 @@ interface ProductDetailProps {
 }
 
 const ProductDetail = ({ product: initialProduct, onBack, onAddToCart }: ProductDetailProps) => {
-  const { data: product } = useProduct(initialProduct.id);
+  const { data: product, refetch } = useProduct(initialProduct.id);
   const [selectedMerchant, setSelectedMerchant] = useState<ProductMerchant | null>(null);
   const [reviewSort, setReviewSort] = useState('newest');
+  const [showReviewForm, setShowReviewForm] = useState(false);
 
   useEffect(() => {
     if (product?.merchants && product.merchants.length > 0 && !selectedMerchant) {
@@ -52,7 +54,7 @@ const ProductDetail = ({ product: initialProduct, onBack, onAddToCart }: Product
     }
   };
 
-    const getCredibilityTag = (credibilityScore: number) => {
+  const getCredibilityTag = (credibilityScore: number) => {
     if (credibilityScore > 70) {
       return 'High Credibility';
     } else if (credibilityScore > 50) {
@@ -62,7 +64,6 @@ const ProductDetail = ({ product: initialProduct, onBack, onAddToCart }: Product
     } else {
       return 'Suspicious';
     }
-
   };
 
   const getCredibilityColor = (credibilityScore: number) => {
@@ -98,6 +99,11 @@ const ProductDetail = ({ product: initialProduct, onBack, onAddToCart }: Product
     if (onAddToCart) {
       onAddToCart(product, merchant);
     }
+  };
+
+  const handleReviewAdded = () => {
+    setShowReviewForm(false);
+    refetch(); // Refresh product data to show new review
   };
 
   return (
@@ -254,18 +260,39 @@ const ProductDetail = ({ product: initialProduct, onBack, onAddToCart }: Product
                 <h3 className="text-2xl font-bold">
                   Reviews for {selectedMerchant.merchant?.name}
                 </h3>
-                <Select value={reviewSort} onValueChange={setReviewSort}>
-                  <SelectTrigger className="w-48">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="newest">Newest First</SelectItem>
-                    <SelectItem value="oldest">Oldest First</SelectItem>
-                    <SelectItem value="credibility">Highest Credibility</SelectItem>
-                    <SelectItem value="rating">Highest Rating</SelectItem>
-                  </SelectContent>
-                </Select>
+                <div className="flex items-center space-x-3">
+                  <Button
+                    onClick={() => setShowReviewForm(!showReviewForm)}
+                    className="bg-orange-500 hover:bg-orange-600"
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    {showReviewForm ? 'Cancel' : 'Write Review'}
+                  </Button>
+                  <Select value={reviewSort} onValueChange={setReviewSort}>
+                    <SelectTrigger className="w-48">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="newest">Newest First</SelectItem>
+                      <SelectItem value="oldest">Oldest First</SelectItem>
+                      <SelectItem value="credibility">Highest Credibility</SelectItem>
+                      <SelectItem value="rating">Highest Rating</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
+
+              {/* Review Form */}
+              {showReviewForm && (
+                <div className="mb-6">
+                  <ReviewForm
+                    productId={product.id}
+                    merchantId={selectedMerchant.merchant_id}
+                    merchantName={selectedMerchant.merchant?.name || ''}
+                    onReviewAdded={handleReviewAdded}
+                  />
+                </div>
+              )}
 
               <div className="space-y-4">
                 {sortedReviews.map((review) => (
@@ -286,6 +313,11 @@ const ProductDetail = ({ product: initialProduct, onBack, onAddToCart }: Product
                             >
                               {getCredibilityTag(review.credibility_score || 0)}
                             </Badge>
+                            {review.verified_purchase && (
+                              <Badge variant="outline" className="bg-green-100 text-green-700 text-xs">
+                                Verified Purchase
+                              </Badge>
+                            )}
                           </div>
                           <div className="flex items-center mt-1">
                             {[...Array(5)].map((_, i) => (
@@ -308,6 +340,13 @@ const ProductDetail = ({ product: initialProduct, onBack, onAddToCart }: Product
                     <p className="text-gray-700 ml-13">{review.comment}</p>
                   </div>
                 ))}
+                
+                {sortedReviews.length === 0 && (
+                  <div className="text-center py-8">
+                    <p className="text-gray-500">No reviews yet for this merchant.</p>
+                    <p className="text-sm text-gray-400 mt-1">Be the first to write a review!</p>
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
