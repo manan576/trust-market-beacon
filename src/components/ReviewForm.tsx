@@ -38,20 +38,30 @@ const ReviewForm = ({ productId, merchantId, merchantName, onReviewAdded }: Revi
     setIsSubmitting(true);
 
     try {
-      // Calculate credibility score based on various factors
-      const credibilityScore = verifiedPurchase ? 
-        Math.min(0.9, 0.5 + (comment.length / 200) * 0.3 + 0.1) : 
-        Math.min(0.7, 0.3 + (comment.length / 200) * 0.2);
+      const customerId = '550e8400-e29b-41d4-a716-446655440001';
+      
+      // Get the customer's actual credibility score from the database
+      const { data: customer, error: customerError } = await supabase
+        .from('customers')
+        .select('credibility_score')
+        .eq('id', customerId)
+        .single();
+
+      if (customerError) {
+        console.error('Error fetching customer:', customerError);
+        toast.error('Failed to fetch customer data. Please try again.');
+        return;
+      }
 
       const { error } = await supabase
         .from('reviews')
         .insert({
           product_id: productId,
           merchant_id: merchantId,
-          customer_id: '550e8400-e29b-41d4-a716-446655440001',
+          customer_id: customerId,
           rating: rating,
           comment: comment.trim(),
-          credibility_score: credibilityScore,
+          credibility_score: customer.credibility_score || 0,
           verified_purchase: verifiedPurchase,
           review_date: new Date().toISOString()
         });

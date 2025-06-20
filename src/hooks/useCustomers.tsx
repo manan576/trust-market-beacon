@@ -1,7 +1,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
-import { Customer, Order } from '@/types/database';
+import { Customer, Order, Review } from '@/types/database';
 
 export const useCustomer = (customerId: string) => {
   return useQuery({
@@ -35,6 +35,29 @@ export const useCustomerOrders = (customerId: string) => {
 
       if (error) {
         console.error('Error fetching customer orders:', error);
+        throw error;
+      }
+
+      return data || [];
+    }
+  });
+};
+
+export const useCustomerReviews = (customerId: string) => {
+  return useQuery({
+    queryKey: ['customer-reviews', customerId],
+    queryFn: async (): Promise<Review[]> => {
+      const { data, error } = await supabase
+        .from('reviews')
+        .select(`
+          *,
+          merchant:merchants(*)
+        `)
+        .eq('customer_id', customerId)
+        .order('review_date', { ascending: false });
+
+      if (error) {
+        console.error('Error fetching customer reviews:', error);
         throw error;
       }
 

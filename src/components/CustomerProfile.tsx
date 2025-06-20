@@ -1,9 +1,9 @@
 
-import { ArrowLeft, Star, Package, Award, Calendar, Mail, TrendingUp } from 'lucide-react';
+import { ArrowLeft, Star, Package, Award, Calendar, Mail, TrendingUp, MessageSquare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useCustomer, useCustomerOrders } from '@/hooks/useCustomers';
+import { useCustomer, useCustomerOrders, useCustomerReviews } from '@/hooks/useCustomers';
 
 interface CustomerProfileProps {
   onBack: () => void;
@@ -15,6 +15,7 @@ const CustomerProfile = ({ onBack }: CustomerProfileProps) => {
   
   const { data: customer } = useCustomer(sampleCustomerId);
   const { data: orders = [] } = useCustomerOrders(sampleCustomerId);
+  const { data: reviews = [] } = useCustomerReviews(sampleCustomerId);
 
   if (!customer) {
     return (
@@ -89,7 +90,7 @@ const CustomerProfile = ({ onBack }: CustomerProfileProps) => {
             <div className="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <Star className="h-6 w-6 text-green-600" />
             </div>
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">{customer.total_reviews}</h3>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">{reviews.length}</h3>
             <p className="text-gray-600">Reviews Written</p>
           </CardContent>
         </Card>
@@ -104,6 +105,67 @@ const CustomerProfile = ({ onBack }: CustomerProfileProps) => {
           </CardContent>
         </Card>
       </div>
+
+      {/* Reviews Section */}
+      <Card className="mb-8">
+        <CardHeader>
+          <CardTitle className="text-xl font-bold flex items-center">
+            <MessageSquare className="h-5 w-5 mr-2" />
+            My Reviews
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {reviews.slice(0, 5).map((review) => (
+              <div key={review.id} className="border-b pb-4">
+                <div className="flex items-start justify-between mb-2">
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-2 mb-2">
+                      <h4 className="font-medium text-gray-900">
+                        Review for {review.merchant?.name}
+                      </h4>
+                      <Badge 
+                        variant="outline"
+                        className={`${getCredibilityColor(customer.credibility_score)} text-white text-xs`}
+                      >
+                        {getCredibilityLabel(customer.credibility_score)}
+                      </Badge>
+                      {review.verified_purchase && (
+                        <Badge variant="outline" className="bg-green-100 text-green-700 text-xs">
+                          Verified Purchase
+                        </Badge>
+                      )}
+                    </div>
+                    <div className="flex items-center mb-2">
+                      {[...Array(5)].map((_, i) => (
+                        <Star 
+                          key={i} 
+                          className={`h-4 w-4 ${
+                            i < (review.rating || 0) 
+                              ? 'text-yellow-400 fill-current' 
+                              : 'text-gray-300'
+                          }`} 
+                        />
+                      ))}
+                      <span className="text-sm text-gray-500 ml-2">
+                        {new Date(review.review_date).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-700">{review.comment}</p>
+              </div>
+            ))}
+            
+            {reviews.length === 0 && (
+              <div className="text-center py-8">
+                <MessageSquare className="h-12 w-12 text-gray-400 mx-auto mb-4" />
+                <p className="text-gray-600">No reviews written yet</p>
+              </div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
 
       {/* Order History */}
       <Card>
