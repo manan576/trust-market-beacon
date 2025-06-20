@@ -70,6 +70,7 @@ export interface Review {
   comment: string;
   credibility_score: number;
   review_date: string;
+  verified_purchase: boolean;
   created_at: string;
   customer?: Customer;
   merchant?: Merchant;
