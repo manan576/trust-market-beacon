@@ -52,7 +52,7 @@ const Header = ({ cartCount, onCartClick, onLogoClick, onProfileClick, onCategor
   onClick={onLogoClick}
 >
   <img
-    src={'public/logo1.png'}
+    src={'/logo1.png'}
     alt="TrustMart Logo"
     className="h-16 w-auto object-contain"
     style={{ maxWidth: "180px" }} // Tweak this value as needed
