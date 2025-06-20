@@ -96,7 +96,7 @@ const Header = ({ cartCount, onCartClick, onLogoClick, onProfileClick, onCategor
                 <img
                   src="https://flagcdn.com/in.svg"
                   alt="IN"
-                  className="h-5 w-5 mr-1 rounded-sm border border-gray-400"
+                  className="h-5 w-5 mr-1 rounded-sm"
                 />
                 <span className="text-xs font-semibold text-white">EN</span>
               </div>
