@@ -187,11 +187,11 @@ const ProductDetail = ({ product: initialProduct, onBack, onAddToCart }: Product
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold text-green-600">
-                          ${merchantData.price}
+                          ₹{merchantData.price}
                         </div>
                         {merchantData.original_price && (
                           <div className="text-sm text-gray-500 line-through">
-                            ${merchantData.original_price}
+                            ₹{merchantData.original_price}
                           </div>
                         )}
                       </div>
