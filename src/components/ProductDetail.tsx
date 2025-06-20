@@ -161,6 +161,7 @@ const ProductDetail = ({ product: initialProduct, onBack, onAddToCart }: Product
                         <div className="flex items-center space-x-3 mb-2">
                           <h4 className="font-medium">{merchantData.merchant?.name}</h4>
                           <Badge 
+                            variant="outline"
                             className={`${getCreditTagColor(merchantData.merchant?.credit_tag || '')} border-0 font-medium px-3 py-1 rounded-full`}
                           >
                             <Shield className="h-3 w-3 mr-1" />
@@ -280,7 +281,7 @@ const ProductDetail = ({ product: initialProduct, onBack, onAddToCart }: Product
                           <div className="flex items-center space-x-2">
                             <span className="font-medium">{review.customer?.name}</span>
                             <Badge 
-                              variant="secondary"
+                              variant="outline"
                               className={`${getCredibilityColor(review.credibility_score || 0)} text-white text-xs`}
                             >
                               {getCredibilityTag(review.credibility_score || 0)}

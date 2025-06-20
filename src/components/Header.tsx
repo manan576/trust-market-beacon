@@ -4,6 +4,8 @@ import { ShoppingCart, Search, Menu, X, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
+
+
 interface HeaderProps {
   cartCount: number;
   onCartClick: () => void;
@@ -46,14 +48,17 @@ const Header = ({ cartCount, onCartClick, onLogoClick, onProfileClick, onCategor
           <div className="flex items-center justify-between h-16">
             {/* Logo */}
             <div 
-              className="flex items-center space-x-2 cursor-pointer"
-              onClick={onLogoClick}
-            >
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">T</span>
-              </div>
-              <span className="text-2xl font-bold text-white">TrustMarket</span>
-            </div>
+  className="flex items-center cursor-pointer"
+  onClick={onLogoClick}
+>
+  <img
+    src={'public/logo1.png'}
+    alt="TrustMart Logo"
+    className="h-16 w-auto object-contain"
+    style={{ maxWidth: "180px" }} // Tweak this value as needed
+  />
+</div>
+
 
             {/* Search Bar - Desktop */}
             <div className="hidden md:flex flex-1 max-w-2xl mx-8">
@@ -87,6 +92,14 @@ const Header = ({ cartCount, onCartClick, onLogoClick, onProfileClick, onCategor
                 {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </Button>
 
+              <div className="flex items-center">
+                <img
+                  src="https://flagcdn.com/in.svg"
+                  alt="IN"
+                  className="h-5 w-5 mr-1 rounded-sm border border-gray-400"
+                />
+                <span className="text-xs font-semibold text-white">EN</span>
+              </div>
               {/* Profile Button */}
               <Button
                 variant="ghost"
