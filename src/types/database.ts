@@ -1,4 +1,3 @@
-
 export interface Category {
   id: string;
   name: string;
@@ -32,6 +31,23 @@ export interface Merchant {
   rating: number;
   total_reviews: number;
   created_at: string;
+  // ML model input parameters
+  quality_return_rate?: number;
+  defect_rate?: number;
+  authenticity_score?: number;
+  quality_sentiment?: number;
+  on_time_delivery_rate?: number;
+  shipping_accuracy?: number;
+  order_fulfillment_rate?: number;
+  inventory_accuracy?: number;
+  avg_rating_normalized?: number;
+  review_sentiment?: number;
+  positive_review_ratio?: number;
+  review_authenticity?: number;
+  response_time_score?: number;
+  query_resolution_rate?: number;
+  service_satisfaction?: number;
+  proactive_communication?: number;
 }
 
 export interface ProductMerchant {

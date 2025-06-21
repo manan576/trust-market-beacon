@@ -119,27 +119,75 @@ export type Database = {
       }
       merchants: {
         Row: {
+          authenticity_score: number | null
+          avg_rating_normalized: number | null
           created_at: string | null
           credit_tag: string | null
+          defect_rate: number | null
           id: string
+          inventory_accuracy: number | null
           name: string
+          on_time_delivery_rate: number | null
+          order_fulfillment_rate: number | null
+          positive_review_ratio: number | null
+          proactive_communication: number | null
+          quality_return_rate: number | null
+          quality_sentiment: number | null
+          query_resolution_rate: number | null
           rating: number | null
+          response_time_score: number | null
+          review_authenticity: number | null
+          review_sentiment: number | null
+          service_satisfaction: number | null
+          shipping_accuracy: number | null
           total_reviews: number | null
         }
         Insert: {
+          authenticity_score?: number | null
+          avg_rating_normalized?: number | null
           created_at?: string | null
           credit_tag?: string | null
+          defect_rate?: number | null
           id?: string
+          inventory_accuracy?: number | null
           name: string
+          on_time_delivery_rate?: number | null
+          order_fulfillment_rate?: number | null
+          positive_review_ratio?: number | null
+          proactive_communication?: number | null
+          quality_return_rate?: number | null
+          quality_sentiment?: number | null
+          query_resolution_rate?: number | null
           rating?: number | null
+          response_time_score?: number | null
+          review_authenticity?: number | null
+          review_sentiment?: number | null
+          service_satisfaction?: number | null
+          shipping_accuracy?: number | null
           total_reviews?: number | null
         }
         Update: {
+          authenticity_score?: number | null
+          avg_rating_normalized?: number | null
           created_at?: string | null
           credit_tag?: string | null
+          defect_rate?: number | null
           id?: string
+          inventory_accuracy?: number | null
           name?: string
+          on_time_delivery_rate?: number | null
+          order_fulfillment_rate?: number | null
+          positive_review_ratio?: number | null
+          proactive_communication?: number | null
+          quality_return_rate?: number | null
+          quality_sentiment?: number | null
+          query_resolution_rate?: number | null
           rating?: number | null
+          response_time_score?: number | null
+          review_authenticity?: number | null
+          review_sentiment?: number | null
+          service_satisfaction?: number | null
+          shipping_accuracy?: number | null
           total_reviews?: number | null
         }
         Relationships: []
