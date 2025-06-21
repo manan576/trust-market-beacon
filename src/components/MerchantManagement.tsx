@@ -62,6 +62,38 @@ const MerchantManagement = () => {
     }
   };
 
+  const testGradeUpdate = async () => {
+    if (!selectedMerchant) return;
+
+    setIsLoading(true);
+    try {
+      console.log('Testing grade update for merchant:', selectedMerchant.id);
+      
+      const { data, error } = await supabase.functions.invoke('update-merchant-grade', {
+        body: { merchant_id: selectedMerchant.id }
+      });
+
+      if (error) {
+        console.error('Error calling edge function:', error);
+        toast.error('Failed to test grade update');
+      } else {
+        console.log('Edge function response:', data);
+        toast.success('Grade update test completed! Check logs for details.');
+        // Refresh merchant data to see the updated grade
+        await fetchMerchants();
+        const updatedMerchant = merchants.find(m => m.id === selectedMerchant.id);
+        if (updatedMerchant) {
+          setSelectedMerchant(updatedMerchant);
+        }
+      }
+    } catch (error) {
+      console.error('Error testing grade update:', error);
+      toast.error('Failed to test grade update');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const getCreditTagColor = (creditTag: string) => {
     switch (creditTag) {
       case 'Excellent':
@@ -136,6 +168,14 @@ const MerchantManagement = () => {
                   {selectedMerchant.credit_tag}
                 </Badge>
               </CardTitle>
+              <Button
+                onClick={testGradeUpdate}
+                disabled={isLoading}
+                className="mt-2"
+                variant="outline"
+              >
+                Test Grade Update
+              </Button>
             </CardHeader>
             <CardContent className="space-y-4 max-h-96 overflow-y-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
