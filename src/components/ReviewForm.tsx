@@ -30,8 +30,8 @@ const ReviewForm = ({ productId, merchantId, merchantName, onReviewAdded }: Revi
       return;
     }
     
-    if (comment.trim().length < 10) {
-      toast.error('Please write at least 10 characters in your review');
+    if (comment.trim().length < 1) {
+      toast.error('Please write at least 1 character in your review');
       return;
     }
 
