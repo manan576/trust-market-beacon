@@ -53,6 +53,7 @@ const ReviewForm = ({ productId, merchantId, merchantName, onReviewAdded }: Revi
         return;
       }
 
+      // Insert the review - this will automatically trigger the credibility update
       const { error } = await supabase
         .from('reviews')
         .insert({
@@ -72,7 +73,7 @@ const ReviewForm = ({ productId, merchantId, merchantName, onReviewAdded }: Revi
         return;
       }
 
-      toast.success('Review submitted successfully!');
+      toast.success('Review submitted successfully! Credibility score is being updated.');
       setRating(0);
       setComment('');
       setVerifiedPurchase(false);

@@ -1,3 +1,4 @@
+
 export interface Category {
   id: string;
   name: string;
@@ -75,6 +76,8 @@ export interface Customer {
   total_orders: number;
   total_reviews: number;
   created_at: string;
+  customer_tenure_months?: number;
+  purchase_value_rupees?: number;
 }
 
 export interface Review {

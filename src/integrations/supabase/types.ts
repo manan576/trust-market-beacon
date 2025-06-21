@@ -88,30 +88,42 @@ export type Database = {
         Row: {
           created_at: string | null
           credibility_score: number | null
+          customer_tenure_months: number | null
           email: string | null
           id: string
           join_date: string | null
           name: string
+          Purchase_value: number | null
+          purchase_value_rupees: number | null
+          Tenure: number | null
           total_orders: number | null
           total_reviews: number | null
         }
         Insert: {
           created_at?: string | null
           credibility_score?: number | null
+          customer_tenure_months?: number | null
           email?: string | null
           id?: string
           join_date?: string | null
           name: string
+          Purchase_value?: number | null
+          purchase_value_rupees?: number | null
+          Tenure?: number | null
           total_orders?: number | null
           total_reviews?: number | null
         }
         Update: {
           created_at?: string | null
           credibility_score?: number | null
+          customer_tenure_months?: number | null
           email?: string | null
           id?: string
           join_date?: string | null
           name?: string
+          Purchase_value?: number | null
+          purchase_value_rupees?: number | null
+          Tenure?: number | null
           total_orders?: number | null
           total_reviews?: number | null
         }
