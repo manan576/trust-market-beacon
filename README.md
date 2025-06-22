@@ -2,6 +2,10 @@
 # Trust Mart 🛒
 
 **Live Demo**: [https://trustmart-team-codecraft.vercel.app/](https://trustmart-team-codecraft.vercel.app/)
+### Admin Pages (Simulation)
+- **Customer Management**: [https://trustmart-team-codecraft.vercel.app/customer-management](https://trustmart-team-codecraft.vercel.app/customer-management)
+- **Merchant Management**: [https://trustmart-team-codecraft.vercel.app/merchant-management](https://trustmart-team-codecraft.vercel.app/merchant-management)
+
 
 ## Project Description
 
@@ -60,12 +64,12 @@ This creates a more trustworthy shopping environment where genuine reviews are h
 ### Machine Learning & APIs
 - **FastAPI** - External ML model API for credibility scoring
 - **Custom ML Models**:
-  - **Customer ML Model**:  
+  - **Customer Model**:  
     - Hosted at [customer-api GitHub repo](https://github.com/avani-05/customer-api)  
     - **Deployed on Render:** Real-time scoring endpoint  
     - Built with **Python** using **Natural Language Toolkit (NLTK)** and **VADER** for sentiment analysis of customer reviews  
     - Predicts customer credibility based on text, rating, verification, tenure, and purchase value  
-  - **Merchant ML Model**:  
+  - **Merchant Model**:  
     - Hosted at [merchant-api GitHub repo](https://github.com/avani-05/merchant-api)  
     - **Deployed on Render:** Real-time scoring endpoint  
     - Uses an **ensemble model** (combination of Random Forest and Gradient Boosting) for robust merchant scoring  
