@@ -92,6 +92,9 @@ export type Database = {
           email: string | null
           id: string
           join_date: string | null
+          last_review_text: string | null
+          last_star_rating: number | null
+          last_verified_purchase: number | null
           name: string
           Purchase_value: number | null
           purchase_value_rupees: number | null
@@ -106,6 +109,9 @@ export type Database = {
           email?: string | null
           id?: string
           join_date?: string | null
+          last_review_text?: string | null
+          last_star_rating?: number | null
+          last_verified_purchase?: number | null
           name: string
           Purchase_value?: number | null
           purchase_value_rupees?: number | null
@@ -120,6 +126,9 @@ export type Database = {
           email?: string | null
           id?: string
           join_date?: string | null
+          last_review_text?: string | null
+          last_star_rating?: number | null
+          last_verified_purchase?: number | null
           name?: string
           Purchase_value?: number | null
           purchase_value_rupees?: number | null

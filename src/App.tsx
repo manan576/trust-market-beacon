@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import MerchantManagement from "./components/MerchantManagement";
 import CustomerManagement from "./components/CustomerManagement";
+import Watermark from "./components/Watermark";
 
 const queryClient = new QueryClient();
 
@@ -24,6 +25,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <Watermark />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
