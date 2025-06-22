@@ -54,22 +54,22 @@ const ProductDetail = ({ product: initialProduct, onBack, onAddToCart }: Product
   };
 
   const getCredibilityTag = (credibilityScore: number) => {
-    if (credibilityScore >= 80) {
+    if (credibilityScore >= 70) {
       return 'High Credibility';
-    } else if (credibilityScore >= 60) {
-      return 'Moderate Credibility';
+    } else if (credibilityScore >= 50) {
+      return 'Good Credibility';
     } else if (credibilityScore >= 30) {
-      return 'Low Credibility';
+      return 'Moderate Credibility';
     } else {
-      return 'Suspicious';
+      return 'Low Credibility';
     }
   };
 
   const getCredibilityColor = (credibilityScore: number) => {
-    if (credibilityScore >= 80) {
+    if (credibilityScore >= 70) {
       return 'bg-green-500';
-    } else if (credibilityScore >= 60) {
-      return 'bg-yellow-500';
+    } else if (credibilityScore >= 50) {
+      return 'bg-blue-500';
     } else if (credibilityScore >= 30) {
       return 'bg-orange-500';
     } else {

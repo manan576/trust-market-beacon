@@ -26,14 +26,16 @@ const CustomerProfile = ({ onBack }: CustomerProfileProps) => {
   }
 
   const getCredibilityColor = (score: number) => {
-    if (score >= 80) return 'bg-green-500';
-    if (score >= 60) return 'bg-yellow-500';
+    if (score >= 70) return 'bg-green-500';
+    if (score >= 50) return 'bg-blue-500';
+    if (score >= 30) return 'bg-orange-500';
     return 'bg-red-500';
   };
 
   const getCredibilityLabel = (score: number) => {
-    if (score >= 80) return 'High Credibility';
-    if (score >= 60) return 'Moderate Credibility';
+    if (score >= 70) return 'High Credibility';
+    if (score >= 50) return 'Good Credibility';
+    if (score >= 30) return 'Moderate Credibillity';
     return 'Low Credibility';
   };
 
@@ -187,7 +189,7 @@ const CustomerProfile = ({ onBack }: CustomerProfileProps) => {
                   </p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-gray-900">${order.price}</p>
+                  <p className="font-bold text-gray-900">₹{order.price}</p>
                   <Badge variant="secondary" className="bg-green-100 text-green-800">
                     {order.status}
                   </Badge>
