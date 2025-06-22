@@ -59,15 +59,24 @@ This creates a more trustworthy shopping environment where genuine reviews are h
 
 ### Machine Learning & APIs
 - **FastAPI** - External ML model API for credibility scoring
-- **Custom ML Models** - Trained models for:
-  - Customer credibility prediction
-  - Review sentiment analysis
-  - Purchase behavior analysis
+- **Custom ML Models**:
+  - **Customer ML Model**:  
+    - Hosted at [customer-api GitHub repo](https://github.com/avani-05/customer-api)  
+    - **Deployed on Render:** Real-time scoring endpoint  
+    - Built with **Python** using **Natural Language Toolkit (NLTK)** and **VADER** for sentiment analysis of customer reviews  
+    - Predicts customer credibility based on text, rating, verification, tenure, and purchase value  
+  - **Merchant ML Model**:  
+    - Hosted at [merchant-api GitHub repo](https://github.com/avani-05/merchant-api)  
+    - **Deployed on Render:** Real-time scoring endpoint  
+    - Uses an **ensemble model** (combination of Random Forest and Gradient Boosting) for robust merchant scoring  
+    - Evaluates merchants on quality, performance, customer service, and sentiment
 
 ### Deployment & Infrastructure
 - **Vercel** - Frontend deployment and hosting
 - **Supabase Cloud** - Database and backend services hosting
-- **External ML API** - Hosted machine learning inference endpoints
+- **External ML API** - Hosted machine learning inference endpoints (via Render)
+
+
 
 ## 🎯 How Scoring Systems Work
 
@@ -182,6 +191,7 @@ supabase db reset
 
 ### External ML API Integration
 - **Customer Credibility ML Model**: Processes customer behavior data to predict trustworthiness
+
 - **Merchant Scoring Algorithm**: Evaluates merchant performance across multiple dimensions
 
 ## 🏗️ Project Architecture
@@ -205,7 +215,17 @@ Trust Mart is built from a **customer perspective**, focusing on:
 ## 👨‍💻 Development Team
 
 **Team CodeCraft 2025**
+Avani Agnihotri
+
+Manan Bhateja
+
+Satvik Gupta
+
+Shantanu Agarwal
 
 ---
 
 *This project demonstrates the implementation of AI-powered trust systems in e-commerce, showcasing modern web development practices and machine learning integration.*
+
+
+
