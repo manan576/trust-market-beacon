@@ -160,7 +160,7 @@ const ReviewForm = ({ productId, merchantId, merchantName, onReviewAdded }: Revi
           {/* Submit Button */}
           <Button
             type="submit"
-            disabled={isSubmitting || rating === 0 || comment.trim().length < 10}
+            disabled={isSubmitting || rating === 0 || comment.trim().length < 1}
             className="w-full bg-orange-500 hover:bg-orange-600"
           >
             {isSubmitting ? (

@@ -1,4 +1,3 @@
-
 export interface Category {
   id: string;
   name: string;
@@ -78,6 +77,9 @@ export interface Customer {
   created_at: string;
   customer_tenure_months?: number;
   purchase_value_rupees?: number;
+  last_review_text?: string;
+  last_star_rating?: number;
+  last_verified_purchase?: number;
 }
 
 export interface Review {

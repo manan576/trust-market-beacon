@@ -28,7 +28,7 @@ serve(async (req) => {
     // Fetch the latest review details
     const { data: reviewData, error: reviewError } = await supabase
       .from('reviews')
-      .select('review_text, rating, verified_purchase, comment')
+      .select('comment, rating, verified_purchase')
       .eq('id', review_id)
       .single();
 
@@ -56,33 +56,42 @@ serve(async (req) => {
     // Update purchase value if it's a verified purchase
     let updatedPurchaseValue = customerData.purchase_value_rupees || 0;
     if (reviewData.verified_purchase && product_price) {
-      updatedPurchaseValue += parseFloat(product_price);
-      
-      const { error: updateError } = await supabase
-        .from('customers')
-        .update({ purchase_value_rupees: updatedPurchaseValue })
-        .eq('id', customer_id);
+      updatedPurchaseValue = parseFloat(updatedPurchaseValue) + parseFloat(product_price);
+      console.log('Updating purchase value from', customerData.purchase_value_rupees, 'to', updatedPurchaseValue);
+    }
 
-      if (updateError) {
-        console.error('Error updating purchase value:', updateError);
-      } else {
-        console.log('Updated purchase value to:', updatedPurchaseValue);
-      }
+    // Convert boolean to integer for verified_purchase
+    const verifiedPurchaseInt = reviewData.verified_purchase ? 1 : 0;
+
+    // Update customer with last review details and purchase value
+    const { error: updateCustomerError } = await supabase
+      .from('customers')
+      .update({ 
+        purchase_value_rupees: updatedPurchaseValue,
+        last_review_text: reviewData.comment || '',
+        last_star_rating: reviewData.rating || 0,
+        last_verified_purchase: verifiedPurchaseInt
+      })
+      .eq('id', customer_id);
+
+    if (updateCustomerError) {
+      console.error('Error updating customer data:', updateCustomerError);
+      throw new Error('Failed to update customer data');
     }
 
     // Prepare payload for ML API
     const mlPayload = {
-      review_text: reviewData.comment || reviewData.review_text || '',
+      review_text: reviewData.comment || '',
       star_rating: reviewData.rating || 0,
-      verified_purchase: reviewData.verified_purchase ? 1 : 0,
+      verified_purchase: verifiedPurchaseInt,
       customer_tenure_months: customerData.customer_tenure_months || 0,
       purchase_value_rupees: updatedPurchaseValue
     };
 
     console.log('Calling ML API with payload:', mlPayload);
 
-    // Call HuggingFace API
-    const mlResponse = await fetch('https://av3005--customer-api-space.hf.space/api/predict/', {
+    // Call Render FastAPI
+    const mlResponse = await fetch('https://customer-api-vk2x.onrender.com/predict_customer', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -91,7 +100,9 @@ serve(async (req) => {
     });
 
     if (!mlResponse.ok) {
-      throw new Error(`ML API request failed: ${mlResponse.status} ${mlResponse.statusText}`);
+      const errorText = await mlResponse.text();
+      console.error('ML API request failed:', mlResponse.status, errorText);
+      throw new Error(`ML API request failed: ${mlResponse.status} ${errorText}`);
     }
 
     const mlResult = await mlResponse.json();
@@ -122,7 +133,8 @@ serve(async (req) => {
       JSON.stringify({ 
         success: true, 
         credibility_score: credibilityScore,
-        updated_purchase_value: updatedPurchaseValue 
+        updated_purchase_value: updatedPurchaseValue,
+        ml_response: mlResult
       }),
       { 
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

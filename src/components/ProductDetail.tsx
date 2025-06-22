@@ -309,9 +309,9 @@ const ProductDetail = ({ product: initialProduct, onBack, onAddToCart }: Product
                             <span className="font-medium">{review.customer?.name}</span>
                             <Badge 
                               variant="outline"
-                              className={`${getCredibilityColor(review.credibility_score || 0)} text-white text-xs`}
+                              className={`${getCredibilityColor(review.customer?.credibility_score || 0)} text-white text-xs`}
                             >
-                              {getCredibilityTag(review.credibility_score || 0)}
+                              {getCredibilityTag(review.customer?.credibility_score || 0)}
                             </Badge>
                             {review.verified_purchase && (
                               <Badge variant="outline" className="bg-green-100 text-green-700 text-xs">
