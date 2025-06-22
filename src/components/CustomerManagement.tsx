@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowLeft, User, TestTube, Save, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,12 +18,25 @@ const CustomerManagement = () => {
   
   // Form state
   const [formData, setFormData] = useState({
-    customer_tenure_months: customer?.customer_tenure_months || 0,
-    purchase_value_rupees: customer?.purchase_value_rupees || 0,
-    last_review_text: customer?.last_review_text || '',
-    last_star_rating: customer?.last_star_rating || 0,
-    last_verified_purchase: customer?.last_verified_purchase || 0,
+    customer_tenure_months: 0,
+    purchase_value_rupees: 0,
+    last_review_text: '',
+    last_star_rating: 0,
+    last_verified_purchase: 0,
   });
+
+  // Update form data when customer data loads
+  useEffect(() => {
+    if (customer) {
+      setFormData({
+        customer_tenure_months: customer.customer_tenure_months || 0,
+        purchase_value_rupees: customer.purchase_value_rupees || 0,
+        last_review_text: customer.last_review_text || '',
+        last_star_rating: customer.last_star_rating || 0,
+        last_verified_purchase: customer.last_verified_purchase || 0,
+      });
+    }
+  }, [customer]);
 
   const handleInputChange = (field: string, value: string | number) => {
     setFormData(prev => ({
@@ -39,6 +52,8 @@ const CustomerManagement = () => {
   const handleUpdateCustomer = async () => {
     setIsUpdating(true);
     try {
+      console.log('Updating customer with data:', formData);
+      
       const { error } = await supabase
         .from('customers')
         .update(formData)
@@ -75,13 +90,18 @@ const CustomerManagement = () => {
 
       if (error) {
         console.error('Error calling credibility API:', error);
-        toast.error('Failed to test credibility API');
+        toast.error(`Failed to test credibility API: ${error.message}`);
         return;
       }
 
       console.log('API response:', data);
-      toast.success(`Credibility API test successful! New score: ${data.credibility_score}`);
-      refetch();
+      
+      if (data.success) {
+        toast.success(`Credibility API test successful! New score: ${data.credibility_score}`);
+        refetch();
+      } else {
+        toast.error(`API test failed: ${data.error || 'Unknown error'}`);
+      }
     } catch (error) {
       console.error('Error testing credibility API:', error);
       toast.error('Failed to test credibility API');

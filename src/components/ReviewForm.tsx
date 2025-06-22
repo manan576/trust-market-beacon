@@ -40,6 +40,11 @@ const ReviewForm = ({ productId, merchantId, merchantName, onReviewAdded }: Revi
     try {
       const customerId = '550e8400-e29b-41d4-a716-446655440001';
       
+      console.log('Submitting review for customer:', customerId);
+      console.log('Product ID:', productId);
+      console.log('Merchant ID:', merchantId);
+      console.log('Verified purchase:', verifiedPurchase);
+
       // Get the customer's actual credibility score from the database
       const { data: customer, error: customerError } = await supabase
         .from('customers')
@@ -53,8 +58,8 @@ const ReviewForm = ({ productId, merchantId, merchantName, onReviewAdded }: Revi
         return;
       }
 
-      // Insert the review - this will automatically trigger the credibility update
-      const { error } = await supabase
+      // Insert the review - this will automatically trigger the credibility update via database trigger
+      const { data: reviewData, error: reviewError } = await supabase
         .from('reviews')
         .insert({
           product_id: productId,
@@ -65,15 +70,22 @@ const ReviewForm = ({ productId, merchantId, merchantName, onReviewAdded }: Revi
           credibility_score: customer.credibility_score || 0,
           verified_purchase: verifiedPurchase,
           review_date: new Date().toISOString()
-        });
+        })
+        .select('id')
+        .single();
 
-      if (error) {
-        console.error('Error submitting review:', error);
+      if (reviewError) {
+        console.error('Error submitting review:', reviewError);
         toast.error('Failed to submit review. Please try again.');
         return;
       }
 
+      console.log('Review inserted successfully with ID:', reviewData.id);
+
+      // The database trigger will automatically call the credibility update function
+      // But we can also show a success message
       toast.success('Review submitted successfully! Credibility score is being updated.');
+      
       setRating(0);
       setComment('');
       setVerifiedPurchase(false);

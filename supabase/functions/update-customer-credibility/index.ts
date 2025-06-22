@@ -14,69 +14,120 @@ serve(async (req) => {
   }
 
   try {
-    const { customer_id, review_id, product_price } = await req.json();
+    const { customer_id, review_id, product_price, test_mode, manual_data } = await req.json();
     
     console.log('Processing customer credibility update for:', customer_id);
     console.log('Review ID:', review_id);
     console.log('Product price:', product_price);
+    console.log('Test mode:', test_mode);
+    console.log('Manual data:', manual_data);
+
+    // Validate customer_id
+    if (!customer_id) {
+      console.error('Missing customer_id');
+      throw new Error('Customer ID is required');
+    }
 
     // Initialize Supabase client
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // Fetch the latest review details
-    const { data: reviewData, error: reviewError } = await supabase
-      .from('reviews')
-      .select('comment, rating, verified_purchase')
-      .eq('id', review_id)
-      .single();
+    let reviewData, customerData, updatedPurchaseValue;
 
-    if (reviewError) {
-      console.error('Error fetching review data:', reviewError);
-      throw new Error('Failed to fetch review data');
-    }
+    if (test_mode && manual_data) {
+      // Use manual data for testing
+      console.log('Using manual test data');
+      reviewData = {
+        comment: manual_data.last_review_text || '',
+        rating: manual_data.last_star_rating || 0,
+        verified_purchase: manual_data.last_verified_purchase || 0
+      };
+      
+      // Fetch customer data for purchase value
+      const { data: customer, error: customerError } = await supabase
+        .from('customers')
+        .select('purchase_value_rupees')
+        .eq('id', customer_id)
+        .single();
 
-    console.log('Review data fetched:', reviewData);
+      if (customerError) {
+        console.error('Error fetching customer data:', customerError);
+        throw new Error('Failed to fetch customer data');
+      }
 
-    // Fetch customer data
-    const { data: customerData, error: customerError } = await supabase
-      .from('customers')
-      .select('customer_tenure_months, purchase_value_rupees')
-      .eq('id', customer_id)
-      .single();
+      customerData = {
+        customer_tenure_months: manual_data.customer_tenure_months || 0,
+        purchase_value_rupees: manual_data.purchase_value_rupees || customer.purchase_value_rupees || 0
+      };
+      
+      updatedPurchaseValue = customerData.purchase_value_rupees;
+    } else {
+      // Normal mode - fetch review data
+      if (!review_id) {
+        console.error('Missing review_id for normal mode');
+        throw new Error('Review ID is required for normal mode');
+      }
 
-    if (customerError) {
-      console.error('Error fetching customer data:', customerError);
-      throw new Error('Failed to fetch customer data');
-    }
+      // Fetch the latest review details
+      const { data: review, error: reviewError } = await supabase
+        .from('reviews')
+        .select('comment, rating, verified_purchase')
+        .eq('id', review_id)
+        .single();
 
-    console.log('Customer data fetched:', customerData);
+      if (reviewError) {
+        console.error('Error fetching review data:', reviewError);
+        throw new Error('Failed to fetch review data');
+      }
 
-    // Update purchase value if it's a verified purchase
-    let updatedPurchaseValue = customerData.purchase_value_rupees || 0;
-    if (reviewData.verified_purchase && product_price) {
-      updatedPurchaseValue = parseFloat(updatedPurchaseValue) + parseFloat(product_price);
-      console.log('Updating purchase value from', customerData.purchase_value_rupees, 'to', updatedPurchaseValue);
+      console.log('Review data fetched:', review);
+      reviewData = review;
+
+      // Fetch customer data
+      const { data: customer, error: customerError } = await supabase
+        .from('customers')
+        .select('customer_tenure_months, purchase_value_rupees')
+        .eq('id', customer_id)
+        .single();
+
+      if (customerError) {
+        console.error('Error fetching customer data:', customerError);
+        throw new Error('Failed to fetch customer data');
+      }
+
+      console.log('Customer data fetched:', customer);
+      customerData = customer;
+
+      // Update purchase value if it's a verified purchase
+      updatedPurchaseValue = customerData.purchase_value_rupees || 0;
+      if (reviewData.verified_purchase && product_price) {
+        updatedPurchaseValue = parseFloat(updatedPurchaseValue) + parseFloat(product_price);
+        console.log('Updating purchase value from', customerData.purchase_value_rupees, 'to', updatedPurchaseValue);
+      }
     }
 
     // Convert boolean to integer for verified_purchase
-    const verifiedPurchaseInt = reviewData.verified_purchase ? 1 : 0;
+    const verifiedPurchaseInt = reviewData.verified_purchase === true || reviewData.verified_purchase === 1 ? 1 : 0;
 
     // Update customer with last review details and purchase value
-    const { error: updateCustomerError } = await supabase
-      .from('customers')
-      .update({ 
-        purchase_value_rupees: updatedPurchaseValue,
-        last_review_text: reviewData.comment || '',
-        last_star_rating: reviewData.rating || 0,
-        last_verified_purchase: verifiedPurchaseInt
-      })
-      .eq('id', customer_id);
+    const updateData = {
+      purchase_value_rupees: updatedPurchaseValue,
+      last_review_text: reviewData.comment || '',
+      last_star_rating: reviewData.rating || 0,
+      last_verified_purchase: verifiedPurchaseInt
+    };
 
-    if (updateCustomerError) {
-      console.error('Error updating customer data:', updateCustomerError);
-      throw new Error('Failed to update customer data');
+    if (!test_mode) {
+      const { error: updateCustomerError } = await supabase
+        .from('customers')
+        .update(updateData)
+        .eq('id', customer_id);
+
+      if (updateCustomerError) {
+        console.error('Error updating customer data:', updateCustomerError);
+        throw new Error('Failed to update customer data');
+      }
     }
 
     // Prepare payload for ML API

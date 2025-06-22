@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { ArrowLeft, Star, Shield, Truck, Gift, ShoppingCart, Zap, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
