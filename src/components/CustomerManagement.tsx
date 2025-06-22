@@ -61,11 +61,36 @@ const CustomerManagement = () => {
 
       if (error) {
         console.error('Error updating customer:', error);
-        toast.error('Failed to update customer parameters');
+        toast.error(`Failed to update customer parameters: ${error.message}`);
         return;
       }
 
       toast.success('Customer parameters updated successfully');
+      
+      // After updating parameters, trigger credibility recalculation
+      try {
+        const { data: credibilityResult, error: credibilityError } = await supabase.functions.invoke('update-customer-credibility', {
+          body: {
+            customer_id: customerId,
+            test_mode: true,
+            manual_data: formData
+          }
+        });
+
+        if (credibilityError) {
+          console.error('Error calling credibility update after parameter update:', credibilityError);
+          toast.error(`Parameters updated but credibility recalculation failed: ${credibilityError.message}`);
+        } else {
+          console.log('Credibility recalculated after parameter update:', credibilityResult);
+          if (credibilityResult.success) {
+            toast.success(`Parameters updated and credibility recalculated! New score: ${credibilityResult.credibility_score}`);
+          }
+        }
+      } catch (functionError) {
+        console.error('Error invoking credibility update function:', functionError);
+        toast.error('Parameters updated but credibility recalculation failed');
+      }
+      
       refetch();
     } catch (error) {
       console.error('Error updating customer:', error);
@@ -96,15 +121,15 @@ const CustomerManagement = () => {
 
       console.log('API response:', data);
       
-      if (data.success) {
+      if (data && data.success) {
         toast.success(`Credibility API test successful! New score: ${data.credibility_score}`);
         refetch();
       } else {
-        toast.error(`API test failed: ${data.error || 'Unknown error'}`);
+        toast.error(`API test failed: ${data?.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Error testing credibility API:', error);
-      toast.error('Failed to test credibility API');
+      toast.error(`Failed to test credibility API: ${error.message || 'Unknown error'}`);
     } finally {
       setIsTesting(false);
     }

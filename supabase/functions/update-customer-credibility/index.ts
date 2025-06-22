@@ -100,15 +100,20 @@ serve(async (req) => {
       customerData = customer;
 
       // Update purchase value if it's a verified purchase
-      updatedPurchaseValue = customerData.purchase_value_rupees || 0;
+      updatedPurchaseValue = parseFloat(customerData.purchase_value_rupees || 0);
       if (reviewData.verified_purchase && product_price) {
-        updatedPurchaseValue = parseFloat(updatedPurchaseValue) + parseFloat(product_price);
+        updatedPurchaseValue += parseFloat(product_price);
         console.log('Updating purchase value from', customerData.purchase_value_rupees, 'to', updatedPurchaseValue);
       }
     }
 
     // Convert boolean to integer for verified_purchase
-    const verifiedPurchaseInt = reviewData.verified_purchase === true || reviewData.verified_purchase === 1 ? 1 : 0;
+    let verifiedPurchaseInt = 0;
+    if (reviewData.verified_purchase === true || reviewData.verified_purchase === 1 || reviewData.verified_purchase === '1') {
+      verifiedPurchaseInt = 1;
+    }
+
+    console.log('Verified purchase converted to:', verifiedPurchaseInt);
 
     // Update customer with last review details and purchase value
     const updateData = {
@@ -117,6 +122,8 @@ serve(async (req) => {
       last_star_rating: reviewData.rating || 0,
       last_verified_purchase: verifiedPurchaseInt
     };
+
+    console.log('Updating customer with data:', updateData);
 
     if (!test_mode) {
       const { error: updateCustomerError } = await supabase
@@ -128,6 +135,7 @@ serve(async (req) => {
         console.error('Error updating customer data:', updateCustomerError);
         throw new Error('Failed to update customer data');
       }
+      console.log('Customer data updated successfully');
     }
 
     // Prepare payload for ML API

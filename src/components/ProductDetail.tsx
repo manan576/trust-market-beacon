@@ -35,7 +35,7 @@ const ProductDetail = ({ product: initialProduct, onBack, onAddToCart }: Product
     );
   }
 
-  // Filter reviews for current merchant
+  // Filter reviews for current merchant and fetch current customer credibility
   const merchantReviews = product.reviews?.filter(review => 
     review.merchant_id === selectedMerchant.merchant_id
   ) || [];

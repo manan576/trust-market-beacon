@@ -43,12 +43,14 @@ const ReviewForm = ({ productId, merchantId, merchantName, onReviewAdded }: Revi
       console.log('Submitting review for customer:', customerId);
       console.log('Product ID:', productId);
       console.log('Merchant ID:', merchantId);
+      console.log('Rating:', rating);
+      console.log('Comment:', comment);
       console.log('Verified purchase:', verifiedPurchase);
 
-      // Get the customer's actual credibility score from the database
+      // Get the customer's current data
       const { data: customer, error: customerError } = await supabase
         .from('customers')
-        .select('credibility_score')
+        .select('credibility_score, purchase_value_rupees')
         .eq('id', customerId)
         .single();
 
@@ -57,6 +59,23 @@ const ReviewForm = ({ productId, merchantId, merchantName, onReviewAdded }: Revi
         toast.error('Failed to fetch customer data. Please try again.');
         return;
       }
+
+      console.log('Current customer data:', customer);
+
+      // Get product price for purchase value calculation
+      const { data: productMerchant, error: priceError } = await supabase
+        .from('product_merchants')
+        .select('price')
+        .eq('product_id', productId)
+        .eq('merchant_id', merchantId)
+        .single();
+
+      if (priceError) {
+        console.error('Error fetching product price:', priceError);
+      }
+
+      const productPrice = productMerchant?.price || 0;
+      console.log('Product price:', productPrice);
 
       // Insert the review - this will automatically trigger the credibility update via database trigger
       const { data: reviewData, error: reviewError } = await supabase
@@ -82,8 +101,26 @@ const ReviewForm = ({ productId, merchantId, merchantName, onReviewAdded }: Revi
 
       console.log('Review inserted successfully with ID:', reviewData.id);
 
-      // The database trigger will automatically call the credibility update function
-      // But we can also show a success message
+      // The database trigger should automatically call the credibility update function
+      // But we'll also manually trigger it to ensure it works
+      try {
+        const { data: credibilityResult, error: credibilityError } = await supabase.functions.invoke('update-customer-credibility', {
+          body: {
+            customer_id: customerId,
+            review_id: reviewData.id,
+            product_price: productPrice
+          }
+        });
+
+        if (credibilityError) {
+          console.error('Error calling credibility update function:', credibilityError);
+        } else {
+          console.log('Credibility update function result:', credibilityResult);
+        }
+      } catch (functionError) {
+        console.error('Error invoking credibility update function:', functionError);
+      }
+
       toast.success('Review submitted successfully! Credibility score is being updated.');
       
       setRating(0);
