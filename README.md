@@ -215,6 +215,7 @@ Trust Mart is built from a **customer perspective**, focusing on:
 ## 👨‍💻 Development Team
 
 **Team CodeCraft 2025**
+
 Avani Agnihotri
 
 Manan Bhateja
