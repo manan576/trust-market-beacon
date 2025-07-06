@@ -124,7 +124,7 @@ const Index = () => {
   const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-white">
       <Header 
         cartCount={cartCount}
         onCartClick={handleCartClick}

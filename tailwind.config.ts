@@ -61,6 +61,12 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				walmart: {
+					blue: 'hsl(var(--walmart-blue))',
+					'blue-dark': 'hsl(var(--walmart-blue-dark))',
+					yellow: 'hsl(var(--walmart-yellow))',
+					'yellow-dark': 'hsl(var(--walmart-yellow-dark))'
 				}
 			},
 			borderRadius: {

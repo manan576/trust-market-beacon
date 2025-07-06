@@ -41,7 +41,7 @@ const Cart = ({ items, onClose, onUpdateQuantity, onRemove }: CartProps) => {
           <ShoppingBag className="h-16 w-16 mx-auto text-gray-400 mb-4" />
           <h3 className="text-xl font-medium text-gray-600 mb-2">Your cart is empty</h3>
           <p className="text-gray-500 mb-6">Add some products to get started!</p>
-          <Button onClick={onClose} className="bg-orange-500 hover:bg-orange-600">
+          <Button onClick={onClose} className="bg-primary hover:bg-primary/90">
             Continue Shopping
           </Button>
         </CardContent>
@@ -135,7 +135,7 @@ const Cart = ({ items, onClose, onUpdateQuantity, onRemove }: CartProps) => {
             </div>
           </div>
           
-          <Button className="w-full mt-6 bg-orange-500 hover:bg-orange-600 text-lg py-3">
+          <Button className="w-full mt-6 bg-walmart-yellow hover:bg-walmart-yellow-dark text-black text-lg py-3 font-bold">
             Proceed to Checkout
           </Button>
         </div>

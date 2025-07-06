@@ -25,80 +25,110 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
     return (
       <div className="space-y-12">
         <div className="text-center">
-          <p className="text-xl text-gray-600">Loading categories...</p>
+          <p className="text-xl text-muted-foreground">Loading categories...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-12">
-      {/* Hero Section */}
-      <div className="relative bg-gradient-to-r from-slate-900 via-purple-900 to-slate-900 rounded-3xl p-12 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-black/20 rounded-3xl"></div>
-        <div className="relative z-10 text-center">
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-            Discover Trusted Products
-          </h1>
-          <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
-            Shop with confidence using our credibility system. Every merchant is verified, every review is scored for trustworthiness.
-          </p>
-          <div className="flex justify-center space-x-4">
-            <div className="bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 border border-white/20">
-              <span className="text-sm font-medium">🛡️ Verified Merchants</span>
+    <div className="space-y-6">
+      {/* Walmart-style promotional banner */}
+      <div className="bg-walmart-yellow rounded-lg p-6 text-center">
+        <div className="flex flex-col lg:flex-row items-center justify-between">
+          <div className="flex-1">
+            <h2 className="text-2xl lg:text-3xl font-bold text-black mb-2">
+              Get 50% off a year of TrustMart+ to shop hot Deals first
+            </h2>
+            <p className="text-black/80 mb-4">Early Access starts in:</p>
+            <div className="flex justify-center space-x-4 text-black font-bold">
+              <div><span className="text-2xl">01</span><br/><span className="text-sm">day</span></div>
+              <div><span className="text-2xl">:</span></div>
+              <div><span className="text-2xl">04</span><br/><span className="text-sm">hours</span></div>
+              <div><span className="text-2xl">:</span></div>
+              <div><span className="text-2xl">45</span><br/><span className="text-sm">mins</span></div>
             </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 border border-white/20">
-              <span className="text-sm font-medium">⭐ Credible Reviews</span>
-            </div>
-            <div className="bg-white/10 backdrop-blur-sm rounded-full px-6 py-3 border border-white/20">
-              <span className="text-sm font-medium">🚚 Fast Delivery</span>
-            </div>
+          </div>
+          <div className="mt-4 lg:mt-0">
+            <Button className="bg-white text-black hover:bg-gray-100 font-bold px-8 py-3 rounded-full">
+              Join TrustMart+
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* Categories Section */}
+      {/* Main promotional grid - Walmart style */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        {/* Large promotional card */}
+        <div className="lg:col-span-2">
+          <Card className="h-full overflow-hidden border-0 shadow-lg">
+            <CardContent className="p-0">
+              <div className="bg-gradient-to-r from-blue-400 to-blue-600 text-white p-8 h-full flex flex-col justify-center">
+                <h3 className="text-3xl font-bold mb-4">Get it in as fast as an hour*</h3>
+                <h2 className="text-5xl font-bold mb-6">Hot July 4th savings</h2>
+                <Button className="bg-white text-black hover:bg-gray-100 w-fit rounded-full px-6 py-2">
+                  Shop now
+                </Button>
+                <div className="mt-4">
+                  <span className="bg-red-600 text-white px-3 py-1 rounded text-sm font-bold">
+                    Rollbacks
+                  </span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        {/* Right column promotional cards */}
+        <div className="space-y-4">
+          <Card className="overflow-hidden border-0 shadow-lg">
+            <CardContent className="p-0">
+              <div className="bg-primary text-white p-6">
+                <h3 className="text-xl font-bold mb-2">Deals start 7/B at 12am ET</h3>
+                <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary">
+                  Explore Deals
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="overflow-hidden border-0 shadow-lg">
+            <CardContent className="p-0">
+              <div className="bg-orange-100 p-6">
+                <h3 className="text-lg font-bold text-gray-800 mb-2">Summer home trends from ₹6</h3>
+                <Button variant="link" className="text-primary p-0 h-auto">
+                  Shop home →
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+
+      {/* Categories Section - Walmart style */}
       <div>
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Shop by Category</h2>
-          <p className="text-xl text-gray-600">Explore our curated selection of premium products</p>
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-foreground mb-2">Shop by Category</h2>
+          <p className="text-muted-foreground">Explore our curated selection of premium products</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {categories.map((category) => {
             const Icon = iconMap[category.icon] || Coffee;
             return (
               <Card 
                 key={category.id}
-                className="group cursor-pointer hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 border-0 overflow-hidden bg-white"
+                className="group cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 border border-gray-200"
                 onClick={() => onCategorySelect(category.name)}
               >
-                <CardContent className="p-0">
-                  <div className={`bg-gradient-to-br ${category.gradient} p-8 text-white relative overflow-hidden`}>
-                    <div className="absolute top-0 right-0 opacity-20 transform translate-x-4 -translate-y-4">
-                      <Icon className="h-32 w-32" />
-                    </div>
-                    <div className="relative z-10">
-                      <div className="bg-white/20 backdrop-blur-sm rounded-full w-16 h-16 flex items-center justify-center mb-4">
-                        <Icon className="h-8 w-8 text-white" />
-                      </div>
-                      <h3 className="text-2xl font-bold mb-2 capitalize">{category.name.replace('-', ' ')}</h3>
-                      <p className="text-white/90 mb-4">{category.description}</p>
-                    </div>
+                <CardContent className="p-4 text-center">
+                  <div className="bg-gray-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
+                    <Icon className="h-8 w-8 text-primary" />
                   </div>
-                  <div className="p-6">
-                    <div className="flex items-center justify-between">
-                      <span className="text-gray-600 font-medium">
-                        {category.product_count} products
-                      </span>
-                      <Button 
-                        variant="ghost" 
-                        className="text-gray-900 hover:text-white hover:bg-gray-900 transition-colors"
-                      >
-                        Explore →
-                      </Button>
-                    </div>
-                  </div>
+                  <h3 className="font-medium text-sm capitalize text-foreground">{category.name.replace('-', ' ')}</h3>
+                  <p className="text-xs text-muted-foreground mt-1">
+                    {category.product_count} products
+                  </p>
                 </CardContent>
               </Card>
             );
@@ -106,36 +136,83 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
         </div>
       </div>
 
+      {/* Secondary promotional grid */}
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+        <Card className="overflow-hidden border-0 shadow-lg">
+          <CardContent className="p-0">
+            <div className="bg-pink-100 p-6">
+              <h3 className="text-lg font-bold text-gray-800 mb-2">Premium beauty. Victoria's Secret.</h3>
+              <Button variant="link" className="text-primary p-0 h-auto">
+                Shop now →
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="overflow-hidden border-0 shadow-lg">
+          <CardContent className="p-0">
+            <div className="bg-yellow-100 p-6">
+              <h3 className="text-lg font-bold text-gray-800 mb-2">Hot, new beauty from ₹10</h3>
+              <Button variant="link" className="text-primary p-0 h-auto">
+                Shop now →
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="overflow-hidden border-0 shadow-lg">
+          <CardContent className="p-0">
+            <div className="bg-blue-100 p-6">
+              <h3 className="text-lg font-bold text-gray-800 mb-2">Classroom supplies for teachers</h3>
+              <Button variant="link" className="text-primary p-0 h-auto">
+                Shop now →
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="overflow-hidden border-0 shadow-lg">
+          <CardContent className="p-0">
+            <div className="bg-walmart-yellow p-6">
+              <h3 className="text-lg font-bold text-gray-800 mb-2">Up to 55% off</h3>
+              <Button variant="link" className="text-primary p-0 h-auto">
+                Shop now →
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
       {/* Trust Features Section */}
-      <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-3xl p-12">
-        <div className="text-center mb-12">
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Trust TrustMarket?</h2>
-          <p className="text-xl text-gray-600">Our innovative trust system ensures you shop with confidence</p>
+      <div className="bg-gray-50 rounded-lg p-8">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold text-foreground mb-4">Why Trust TrustMart?</h2>
+          <p className="text-lg text-muted-foreground">Our innovative trust system ensures you shop with confidence</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center">
-            <div className="bg-green-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-              <span className="text-3xl">🛡️</span>
+            <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl">🛡️</span>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3">Merchant Credit Tags</h3>
-            <p className="text-gray-600">Every merchant gets a verified credit rating: Excellent, Good, or Moderate based on their track record.</p>
+            <h3 className="text-lg font-bold text-foreground mb-2">Merchant Credit Tags</h3>
+            <p className="text-muted-foreground text-sm">Every merchant gets a verified credit rating: Excellent, Good, or Moderate based on their track record.</p>
           </div>
           
           <div className="text-center">
-            <div className="bg-blue-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-              <span className="text-3xl">⭐</span>
+            <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl">⭐</span>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3">Credibility Scores</h3>
-            <p className="text-gray-600">Customer reviews are scored for trustworthiness with color-coded credibility indicators.</p>
+            <h3 className="text-lg font-bold text-foreground mb-2">Credibility Scores</h3>
+            <p className="text-muted-foreground text-sm">Customer reviews are scored for trustworthiness with color-coded credibility indicators.</p>
           </div>
           
           <div className="text-center">
-            <div className="bg-purple-100 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6">
-              <span className="text-3xl">🔍</span>
+            <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+              <span className="text-2xl">🔍</span>
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3">Smart Sorting</h3>
-            <p className="text-gray-600">Sort reviews by credibility to see the most trustworthy opinions first.</p>
+            <h3 className="text-lg font-bold text-foreground mb-2">Smart Sorting</h3>
+            <p className="text-muted-foreground text-sm">Sort reviews by credibility to see the most trustworthy opinions first.</p>
           </div>
         </div>
       </div>
