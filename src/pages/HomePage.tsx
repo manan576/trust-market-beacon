@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 
@@ -20,177 +19,332 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
             <div className="flex justify-center space-x-4 text-black font-bold">
               <div><span className="text-2xl">01</span><br/><span className="text-sm">day</span></div>
               <div><span className="text-2xl">:</span></div>
-              <div><span className="text-2xl">04</span><br/><span className="text-sm">hours</span></div>
+              <div><span className="text-2xl">03</span><br/><span className="text-sm">hours</span></div>
               <div><span className="text-2xl">:</span></div>
-              <div><span className="text-2xl">45</span><br/><span className="text-sm">mins</span></div>
+              <div><span className="text-2xl">11</span><br/><span className="text-sm">mins</span></div>
             </div>
           </div>
           <div className="mt-4 lg:mt-0">
-            <Button className="bg-white text-black hover:bg-gray-100 font-bold px-8 py-3 rounded-full">
+            <Button className="bg-white text-black hover:bg-gray-100 font-bold px-6 py-2 rounded-full">
               Join Walmart+
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Asymmetrical Grid Layout - Walmart Style */}
-      <div className="grid grid-cols-12 gap-4 h-[600px]">
-        {/* Left Column - Beauty New Arrivals (Tall) */}
-        <div className="col-span-12 md:col-span-3 row-span-2">
-          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#f7d5d3' }}>
-            <div className="p-6 h-full flex flex-col justify-between">
+      {/* Single Contiguous Grid */}
+      <div className="grid grid-cols-12 gap-4 auto-rows-auto">
+        {/* 1) Hot, new beauty from $10 */}
+        <div className="col-span-12 md:col-span-3">
+          <div
+            className="rounded-lg overflow-hidden h-full"
+            style={{ backgroundColor: '#E0F7FA' }}
+          >
+            <div className="p-6 flex flex-col h-full justify-between">
               <div>
-                <div className="inline-block bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold mb-4">
+                <span className="inline-block bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold mb-2">
                   New Arrivals
-                </div>
-                <h3 className="text-xl font-bold text-gray-800 mb-4">Hot, new beauty from $10</h3>
-                <div className="flex space-x-2 mb-6">
-                  <img src="/placeholder.svg" alt="Beauty product 1" className="w-16 h-16 object-cover rounded" />
-                  <img src="/placeholder.svg" alt="Beauty product 2" className="w-16 h-16 object-cover rounded" />
-                  <img src="/placeholder.svg" alt="Beauty product 3" className="w-16 h-16 object-cover rounded" />
-                </div>
+                </span>
+                <h3 className="text-xl font-bold text-gray-800 mb-4">
+                  Hot, new beauty from $10
+                </h3>
+                <img
+                  src="/images/beauty.png"
+                  alt="Beauty"
+                  className="w-full h-40 object-cover rounded"
+                />
               </div>
-              <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
+              <Button variant="link" className="text-blue-600 p-0">
                 Shop now
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Center Large Tile - Hot July 4th Savings */}
+        {/* 2) Hot July 4th savings */}
         <div className="col-span-12 md:col-span-6">
-          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#87ceeb' }}>
-            <div className="p-8 h-full flex flex-col justify-center relative">
-              <p className="text-gray-800 mb-2">Get it in as fast as an hour*</p>
-              <h2 className="text-4xl font-bold text-gray-800 mb-6">Hot July 4th savings</h2>
-              
-              {/* Product Images */}
-              <div className="flex space-x-4 mb-6">
-                <img src="/placeholder.svg" alt="Speaker" className="w-24 h-24 object-cover rounded-lg" />
-                <img src="/placeholder.svg" alt="Blender" className="w-24 h-24 object-cover rounded-lg" />
-                <img src="/placeholder.svg" alt="Book" className="w-24 h-24 object-cover rounded-lg" />
+          <div
+            className="rounded-lg overflow-hidden h-full"
+            style={{ backgroundColor: '#B3E5FC' }}
+          >
+            <div className="p-8 flex flex-col md:flex-row items-center h-full">
+              <div className="flex-1">
+                <p className="text-gray-800 mb-2">Get it in as fast as an hour*</p>
+                <h2 className="text-4xl font-bold text-gray-800 mb-6">
+                  Hot July 4th savings
+                </h2>
+                <Button className="bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2">
+                  Shop now
+                </Button>
+                <div className="inline-block bg-red-600 text-white px-3 py-1 rounded text-sm font-bold mt-4">
+                  Rollbacks
+                </div>
               </div>
-              
-              <Button className="bg-white text-black hover:bg-gray-100 w-fit rounded-full px-6 py-2 mb-4">
-                Shop now
-              </Button>
-              
-              <div className="bg-red-600 text-white px-3 py-1 rounded text-sm font-bold w-fit">
-                Rollbacks
+              <div className="flex flex-col space-y-4 md:space-y-2 md:ml-8 mt-6 md:mt-0">
+                <img
+                  src="/images/speaker.png"
+                  alt="Speaker"
+                  className="w-48 h-48 object-cover rounded-lg"
+                />
+                <div className="flex space-x-2 justify-end">
+                  <img
+                    src="/images/blender.png"
+                    alt="Blender"
+                    className="w-24 h-24 object-cover rounded-lg"
+                  />
+                  <img
+                    src="/images/book.png"
+                    alt="Book"
+                    className="w-24 h-24 object-cover rounded-lg"
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right Column - Teacher Supplies */}
+        {/* 3) Tons of classroom supplies for teachers */}
         <div className="col-span-12 md:col-span-3">
-          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#87ceeb' }}>
-            <div className="p-6 h-full flex flex-col justify-between">
+          <div
+            className="rounded-lg overflow-hidden h-full"
+            style={{ backgroundColor: '#B2EBF2' }}
+          >
+            <div className="p-6 flex flex-col h-full justify-between">
               <div>
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Tons of classroom supplies for teachers</h3>
-                <img src="/placeholder.svg" alt="School supplies" className="w-20 h-20 object-cover rounded mb-4" />
+                <h3 className="text-lg font-bold text-gray-800 mb-4">
+                  Tons of classroom supplies for teachers
+                </h3>
+                <img
+                  src="/images/supplies.png"
+                  alt="Classroom supplies"
+                  className="w-full h-32 object-cover rounded"
+                />
               </div>
-              <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
-                Shop now
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Second Row of Asymmetrical Grid */}
-      <div className="grid grid-cols-12 gap-4 h-[300px]">
-        {/* Home Appliances */}
-        <div className="col-span-12 md:col-span-3">
-          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#87ceeb' }}>
-            <div className="p-6 h-full flex flex-col justify-between">
-              <div>
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Save on home appliances</h3>
-                <img src="/placeholder.svg" alt="Home appliance" className="w-20 h-24 object-cover rounded mb-4" />
-              </div>
-              <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
+              <Button variant="link" className="text-blue-600 p-0">
                 Shop now
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Summer Home Trends */}
-        <div className="col-span-12 md:col-span-3">
-          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#f4c2a1' }}>
-            <div className="p-6 h-full flex flex-col justify-between">
+        {/* 4) Save on home appliances (tall) */}
+        <div className="col-span-12 md:col-span-3 row-span-2">
+          <div
+            className="rounded-lg overflow-hidden h-full"
+            style={{ backgroundColor: '#81D4FA' }}
+          >
+            <div className="p-6 flex flex-col h-full justify-between">
               <div>
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Summer home trends</h3>
-                <img src="/placeholder.svg" alt="Home decor" className="w-20 h-16 object-cover rounded mb-4" />
+                <h3 className="text-lg font-bold text-gray-800 mb-4">
+                  Save on home appliances
+                </h3>
+                <img
+                  src="/images/fridge.png"
+                  alt="Refrigerator"
+                  className="w-full h-full object-cover rounded"
+                />
               </div>
-              <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
+              <Button variant="link" className="text-blue-600 p-0">
+                Shop now
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* 5) Summer home trends */}
+        <div className="col-span-12 md:col-span-3">
+          <div
+            className="rounded-lg overflow-hidden h-full"
+            style={{ backgroundColor: '#E1BEE7' }}
+          >
+            <div className="p-6 flex flex-col h-full justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">
+                  Summer home trends
+                </h3>
+                <img
+                  src="/images/room.png"
+                  alt="Home decor"
+                  className="w-full h-40 object-cover rounded"
+                />
+              </div>
+              <Button variant="link" className="text-blue-600 p-0">
                 Shop home
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Up to 60% Off */}
+        {/* 6) Up to 60% off */}
         <div className="col-span-12 md:col-span-3">
-          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#ffc220' }}>
-            <div className="p-6 h-full flex flex-col justify-between">
+          <div
+            className="rounded-lg overflow-hidden h-full"
+            style={{ backgroundColor: '#80CBC4' }}
+          >
+            <div className="p-6 flex flex-col h-full justify-between">
               <div>
                 <h3 className="text-lg font-bold text-gray-800 mb-4">Up to 60% off</h3>
-                <img src="/placeholder.svg" alt="Tower fan" className="w-16 h-20 object-cover rounded mb-4" />
+                <img
+                  src="/images/fan.png"
+                  alt="Tower fan"
+                  className="w-full h-40 object-cover rounded"
+                />
               </div>
-              <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
+              <Button variant="link" className="text-blue-600 p-0">
                 Shop now
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Skincare Offer */}
+        {/* 7) Save on La Roche-Posay Anthelios */}
         <div className="col-span-12 md:col-span-3">
-          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#f5e6d3' }}>
-            <div className="p-6 h-full flex flex-col justify-between">
+          <div
+            className="rounded-lg overflow-hidden h-full"
+            style={{ backgroundColor: '#C5CAE9' }}
+          >
+            <div className="p-6 flex flex-col h-full justify-between">
               <div>
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Save on La Roche-Posay Anthelios</h3>
-                <div className="flex space-x-2 mb-4">
-                  <img src="/placeholder.svg" alt="Sunscreen 1" className="w-12 h-16 object-cover rounded" />
-                  <img src="/placeholder.svg" alt="Sunscreen 2" className="w-12 h-16 object-cover rounded" />
+                <h3 className="text-lg font-bold text-gray-800 mb-4">
+                  Save on La Roche-Posay Anthelios
+                </h3>
+                <div className="flex space-x-2">
+                  <img
+                    src="/images/sunscreen1.png"
+                    alt="Anthelios 1"
+                    className="w-1/2 h-36 object-cover rounded"
+                  />
+                  <img
+                    src="/images/sunscreen2.png"
+                    alt="Anthelios 2"
+                    className="w-1/2 h-36 object-cover rounded"
+                  />
                 </div>
               </div>
-              <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
+              <Button variant="link" className="text-blue-600 p-0">
                 Shop now
               </Button>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Bottom Row */}
-      <div className="grid grid-cols-12 gap-4 h-[200px]">
-        {/* Jurassic World Movie */}
-        <div className="col-span-12 md:col-span-6">
-          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#e6f3ff' }}>
-            <div className="p-6 h-full flex flex-col justify-between">
+        {/* 8) Premium beauty. Victoria’s Secret. */}
+        <div className="col-span-12 md:col-span-3">
+          <div
+            className="rounded-lg overflow-hidden h-full"
+            style={{ backgroundColor: '#F8BBD0' }}
+          >
+            <div className="p-6 flex flex-col h-full justify-between">
               <div>
-                <h3 className="text-lg font-bold text-gray-800 mb-4">New Jurassic World movie</h3>
-                <img src="/placeholder.svg" alt="Jurassic World movie" className="w-24 h-16 object-cover rounded mb-4" />
+                <h3 className="text-lg font-bold text-gray-800 mb-4">
+                  Premium beauty. Victoria’s Secret.
+                </h3>
+                <img
+                  src="/images/victoria.png"
+                  alt="Victoria's Secret"
+                  className="w-full h-40 object-cover rounded"
+                />
               </div>
-              <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
+              <Button variant="link" className="text-blue-600 p-0">
+                Shop now
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* 9) Don’t miss out! */}
+        <div className="col-span-12 md:col-span-6">
+          <div
+            className="rounded-lg overflow-hidden h-full"
+            style={{ backgroundColor: '#C8E6C9' }}
+          >
+            <div className="p-6 flex flex-col h-full justify-between">
+              <div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">
+                  Don’t miss out!
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Get 50% off a year of Walmart+ & shop Deals first
+                </p>
+                <img
+                  src="/images/walmart-deals.png"
+                  alt="Walmart Deals"
+                  className="w-full h-32 object-cover rounded"
+                />
+              </div>
+              <Button variant="link" className="text-blue-600 p-0">
+                Learn more
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* 10) Shop by Category (fills blank) */}
+        <div className="col-span-12 md:col-span-3">
+          <div
+            className="rounded-lg overflow-hidden h-full"
+            style={{ backgroundColor: '#D1C4E9' }}
+          >
+            <div className="p-6 flex flex-col h-full justify-center items-center">
+              <h3 className="text-xl font-bold text-gray-800 mb-4">
+                Shop by Category
+              </h3>
+              <Button
+                onClick={() => onCategorySelect('electronics')}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full"
+              >
+                Browse All Categories
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* 11) New Jurassic World movie */}
+        <div className="col-span-12 md:col-span-3">
+          <div
+            className="rounded-lg overflow-hidden h-full"
+            style={{ backgroundColor: '#E3F2FD' }}
+          >
+            <div className="p-6 flex flex-col h-full justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">
+                  New Jurassic World movie
+                </h3>
+                <img
+                  src="/images/dinosaur.png"
+                  alt="Jurassic World"
+                  className="w-full h-40 object-cover rounded"
+                />
+              </div>
+              <Button variant="link" className="text-blue-600 p-0">
                 Shop toys & more
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Additional Promotional Space */}
+        {/* Duplicate Don’t miss out! row (as in original) */}
         <div className="col-span-12 md:col-span-6">
-          <div className="h-full rounded-lg overflow-hidden bg-gray-100">
-            <div className="p-6 h-full flex flex-col justify-center items-center text-center">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">Shop by Category</h3>
-              <Button 
-                onClick={() => onCategorySelect('electronics')}
-                className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 py-2"
-              >
-                Browse All Categories
+          <div
+            className="rounded-lg overflow-hidden h-full"
+            style={{ backgroundColor: '#fae6b1' }}
+          >
+            <div className="p-6 flex flex-col h-full justify-between">
+              <div>
+                <h3 className="text-xl font-bold text-gray-800 mb-2">
+                  Don’t miss out!
+                </h3>
+                <p className="text-gray-600 mb-4">
+                  Get 50% off a year of Walmart+ & shop Deals first
+                </p>
+                <img
+                  src="/images/walmart-deals.png"
+                  alt="Walmart Deals"
+                  className="w-full h-32 object-cover rounded"
+                />
+              </div>
+              <Button variant="link" className="text-blue-600 p-0">
+                Learn more
               </Button>
             </div>
           </div>
@@ -200,33 +354,49 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
       {/* Trust Features Section */}
       <div className="bg-gray-50 rounded-lg p-8 mt-8">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Why Trust TrustMart?</h2>
-          <p className="text-lg text-gray-600">Our innovative trust system ensures you shop with confidence</p>
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+            Why Trust TrustMart?
+          </h2>
+          <p className="text-lg text-gray-600">
+            Our innovative trust system ensures you shop with confidence
+          </p>
         </div>
-        
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="text-center">
             <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">🛡️</span>
             </div>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">Merchant Credit Tags</h3>
-            <p className="text-gray-600 text-sm">Every merchant gets a verified credit rating: Excellent, Good, or Moderate based on their track record.</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">
+              Merchant Credit Tags
+            </h3>
+            <p className="text-gray-600 text-sm">
+              Every merchant gets a verified credit rating: Excellent, Good, or
+              Moderate based on their track record.
+            </p>
           </div>
-          
           <div className="text-center">
             <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">⭐</span>
             </div>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">Credibility Scores</h3>
-            <p className="text-gray-600 text-sm">Customer reviews are scored for trustworthiness with color-coded credibility indicators.</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">
+              Credibility Scores
+            </h3>
+            <p className="text-gray-600 text-sm">
+              Customer reviews are scored for trustworthiness with color-coded
+              credibility indicators.
+            </p>
           </div>
-          
           <div className="text-center">
             <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">🔍</span>
             </div>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">Smart Sorting</h3>
-            <p className="text-gray-600 text-sm">Sort reviews by credibility to see the most trustworthy opinions first.</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">
+              Smart Sorting
+            </h3>
+            <p className="text-gray-600 text-sm">
+              Sort reviews by credibility to see the most trustworthy opinions
+              first.
+            </p>
           </div>
         </div>
       </div>
