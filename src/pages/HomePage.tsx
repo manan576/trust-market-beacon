@@ -45,9 +45,9 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-4">Hot, new beauty from $10</h3>
                 <div className="flex space-x-2 mb-6">
-                  <div className="w-16 h-16 bg-gray-300 rounded"></div>
-                  <div className="w-16 h-16 bg-gray-300 rounded"></div>
-                  <div className="w-16 h-16 bg-gray-300 rounded"></div>
+                  <img src="/placeholder.svg" alt="Beauty product 1" className="w-16 h-16 object-cover rounded" />
+                  <img src="/placeholder.svg" alt="Beauty product 2" className="w-16 h-16 object-cover rounded" />
+                  <img src="/placeholder.svg" alt="Beauty product 3" className="w-16 h-16 object-cover rounded" />
                 </div>
               </div>
               <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
@@ -66,9 +66,9 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
               
               {/* Product Images */}
               <div className="flex space-x-4 mb-6">
-                <div className="w-24 h-24 bg-gray-700 rounded-lg"></div>
-                <div className="w-24 h-24 bg-blue-400 rounded-lg"></div>
-                <div className="w-24 h-24 bg-red-400 rounded-lg"></div>
+                <img src="/placeholder.svg" alt="Speaker" className="w-24 h-24 object-cover rounded-lg" />
+                <img src="/placeholder.svg" alt="Blender" className="w-24 h-24 object-cover rounded-lg" />
+                <img src="/placeholder.svg" alt="Book" className="w-24 h-24 object-cover rounded-lg" />
               </div>
               
               <Button className="bg-white text-black hover:bg-gray-100 w-fit rounded-full px-6 py-2 mb-4">
@@ -88,7 +88,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
             <div className="p-6 h-full flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold text-gray-800 mb-4">Tons of classroom supplies for teachers</h3>
-                <div className="w-20 h-20 bg-yellow-400 rounded mb-4"></div>
+                <img src="/placeholder.svg" alt="School supplies" className="w-20 h-20 object-cover rounded mb-4" />
               </div>
               <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
                 Shop now
@@ -106,7 +106,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
             <div className="p-6 h-full flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold text-gray-800 mb-4">Save on home appliances</h3>
-                <div className="w-20 h-24 bg-gray-400 rounded mb-4"></div>
+                <img src="/placeholder.svg" alt="Home appliance" className="w-20 h-24 object-cover rounded mb-4" />
               </div>
               <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
                 Shop now
@@ -121,7 +121,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
             <div className="p-6 h-full flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold text-gray-800 mb-4">Summer home trends</h3>
-                <div className="w-20 h-16 bg-blue-300 rounded mb-4"></div>
+                <img src="/placeholder.svg" alt="Home decor" className="w-20 h-16 object-cover rounded mb-4" />
               </div>
               <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
                 Shop home
@@ -136,7 +136,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
             <div className="p-6 h-full flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold text-gray-800 mb-4">Up to 60% off</h3>
-                <div className="w-16 h-20 bg-gray-600 rounded mb-4"></div>
+                <img src="/placeholder.svg" alt="Tower fan" className="w-16 h-20 object-cover rounded mb-4" />
               </div>
               <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
                 Shop now
@@ -152,8 +152,8 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
               <div>
                 <h3 className="text-lg font-bold text-gray-800 mb-4">Save on La Roche-Posay Anthelios</h3>
                 <div className="flex space-x-2 mb-4">
-                  <div className="w-12 h-16 bg-orange-400 rounded"></div>
-                  <div className="w-12 h-16 bg-orange-400 rounded"></div>
+                  <img src="/placeholder.svg" alt="Sunscreen 1" className="w-12 h-16 object-cover rounded" />
+                  <img src="/placeholder.svg" alt="Sunscreen 2" className="w-12 h-16 object-cover rounded" />
                 </div>
               </div>
               <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
@@ -172,7 +172,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
             <div className="p-6 h-full flex flex-col justify-between">
               <div>
                 <h3 className="text-lg font-bold text-gray-800 mb-4">New Jurassic World movie</h3>
-                <div className="w-24 h-16 bg-green-400 rounded mb-4"></div>
+                <img src="/placeholder.svg" alt="Jurassic World movie" className="w-24 h-16 object-cover rounded mb-4" />
               </div>
               <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
                 Shop toys & more
