@@ -1,44 +1,20 @@
 
 import { useState } from 'react';
-import { ShoppingBag, Smartphone, Heart, Sofa, Dumbbell, Coffee } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { useCategories } from '@/hooks/useCategories';
 
 interface HomePageProps {
   onCategorySelect: (categoryName: string) => void;
 }
 
-const iconMap: { [key: string]: React.ComponentType<any> } = {
-  'Smartphone': Smartphone,
-  'ShoppingBag': ShoppingBag,
-  'Heart': Heart,
-  'Sofa': Sofa,
-  'Dumbbell': Dumbbell,
-  'Coffee': Coffee
-};
-
 const HomePage = ({ onCategorySelect }: HomePageProps) => {
-  const { data: categories = [], isLoading } = useCategories();
-
-  if (isLoading) {
-    return (
-      <div className="space-y-12">
-        <div className="text-center">
-          <p className="text-xl text-muted-foreground">Loading categories...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="space-y-6">
-      {/* Walmart-style promotional banner */}
-      <div className="bg-walmart-yellow rounded-lg p-6 text-center">
+    <div className="space-y-4">
+      {/* Yellow promotional banner */}
+      <div style={{ backgroundColor: '#ffc220' }} className="rounded-lg p-6 text-center">
         <div className="flex flex-col lg:flex-row items-center justify-between">
           <div className="flex-1">
             <h2 className="text-2xl lg:text-3xl font-bold text-black mb-2">
-              Get 50% off a year of TrustMart+ to shop hot Deals first
+              Get 50% off a year of Walmart+ to shop hot Deals first
             </h2>
             <p className="text-black/80 mb-4">Early Access starts in:</p>
             <div className="flex justify-center space-x-4 text-black font-bold">
@@ -51,143 +27,181 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
           </div>
           <div className="mt-4 lg:mt-0">
             <Button className="bg-white text-black hover:bg-gray-100 font-bold px-8 py-3 rounded-full">
-              Join TrustMart+
+              Join Walmart+
             </Button>
           </div>
         </div>
       </div>
 
-      {/* Main promotional grid - Walmart style */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        {/* Large promotional card */}
-        <div className="lg:col-span-2">
-          <Card className="h-full overflow-hidden border-0 shadow-lg">
-            <CardContent className="p-0">
-              <div className="bg-gradient-to-r from-blue-400 to-blue-600 text-white p-8 h-full flex flex-col justify-center">
-                <h3 className="text-3xl font-bold mb-4">Get it in as fast as an hour*</h3>
-                <h2 className="text-5xl font-bold mb-6">Hot July 4th savings</h2>
-                <Button className="bg-white text-black hover:bg-gray-100 w-fit rounded-full px-6 py-2">
-                  Shop now
-                </Button>
-                <div className="mt-4">
-                  <span className="bg-red-600 text-white px-3 py-1 rounded text-sm font-bold">
-                    Rollbacks
-                  </span>
+      {/* Asymmetrical Grid Layout - Walmart Style */}
+      <div className="grid grid-cols-12 gap-4 h-[600px]">
+        {/* Left Column - Beauty New Arrivals (Tall) */}
+        <div className="col-span-12 md:col-span-3 row-span-2">
+          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#f7d5d3' }}>
+            <div className="p-6 h-full flex flex-col justify-between">
+              <div>
+                <div className="inline-block bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold mb-4">
+                  New Arrivals
+                </div>
+                <h3 className="text-xl font-bold text-gray-800 mb-4">Hot, new beauty from $10</h3>
+                <div className="flex space-x-2 mb-6">
+                  <div className="w-16 h-16 bg-gray-300 rounded"></div>
+                  <div className="w-16 h-16 bg-gray-300 rounded"></div>
+                  <div className="w-16 h-16 bg-gray-300 rounded"></div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+              <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
+                Shop now
+              </Button>
+            </div>
+          </div>
         </div>
 
-        {/* Right column promotional cards */}
-        <div className="space-y-4">
-          <Card className="overflow-hidden border-0 shadow-lg">
-            <CardContent className="p-0">
-              <div className="bg-primary text-white p-6">
-                <h3 className="text-xl font-bold mb-2">Deals start 7/B at 12am ET</h3>
-                <Button variant="outline" className="bg-transparent border-white text-white hover:bg-white hover:text-primary">
-                  Explore Deals
-                </Button>
+        {/* Center Large Tile - Hot July 4th Savings */}
+        <div className="col-span-12 md:col-span-6">
+          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#87ceeb' }}>
+            <div className="p-8 h-full flex flex-col justify-center relative">
+              <p className="text-gray-800 mb-2">Get it in as fast as an hour*</p>
+              <h2 className="text-4xl font-bold text-gray-800 mb-6">Hot July 4th savings</h2>
+              
+              {/* Product Images */}
+              <div className="flex space-x-4 mb-6">
+                <div className="w-24 h-24 bg-gray-700 rounded-lg"></div>
+                <div className="w-24 h-24 bg-blue-400 rounded-lg"></div>
+                <div className="w-24 h-24 bg-red-400 rounded-lg"></div>
               </div>
-            </CardContent>
-          </Card>
+              
+              <Button className="bg-white text-black hover:bg-gray-100 w-fit rounded-full px-6 py-2 mb-4">
+                Shop now
+              </Button>
+              
+              <div className="bg-red-600 text-white px-3 py-1 rounded text-sm font-bold w-fit">
+                Rollbacks
+              </div>
+            </div>
+          </div>
+        </div>
 
-          <Card className="overflow-hidden border-0 shadow-lg">
-            <CardContent className="p-0">
-              <div className="bg-orange-100 p-6">
-                <h3 className="text-lg font-bold text-gray-800 mb-2">Summer home trends from ₹6</h3>
-                <Button variant="link" className="text-primary p-0 h-auto">
-                  Shop home →
-                </Button>
+        {/* Right Column - Teacher Supplies */}
+        <div className="col-span-12 md:col-span-3">
+          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#87ceeb' }}>
+            <div className="p-6 h-full flex flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">Tons of classroom supplies for teachers</h3>
+                <div className="w-20 h-20 bg-yellow-400 rounded mb-4"></div>
               </div>
-            </CardContent>
-          </Card>
+              <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
+                Shop now
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Categories Section - Walmart style */}
-      <div>
-        <div className="mb-6">
-          <h2 className="text-2xl font-bold text-foreground mb-2">Shop by Category</h2>
-          <p className="text-muted-foreground">Explore our curated selection of premium products</p>
+      {/* Second Row of Asymmetrical Grid */}
+      <div className="grid grid-cols-12 gap-4 h-[300px]">
+        {/* Home Appliances */}
+        <div className="col-span-12 md:col-span-3">
+          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#87ceeb' }}>
+            <div className="p-6 h-full flex flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">Save on home appliances</h3>
+                <div className="w-20 h-24 bg-gray-400 rounded mb-4"></div>
+              </div>
+              <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
+                Shop now
+              </Button>
+            </div>
+          </div>
         </div>
-        
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {categories.map((category) => {
-            const Icon = iconMap[category.icon] || Coffee;
-            return (
-              <Card 
-                key={category.id}
-                className="group cursor-pointer hover:shadow-lg transition-all duration-200 hover:scale-105 border border-gray-200"
-                onClick={() => onCategorySelect(category.name)}
+
+        {/* Summer Home Trends */}
+        <div className="col-span-12 md:col-span-3">
+          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#f4c2a1' }}>
+            <div className="p-6 h-full flex flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">Summer home trends</h3>
+                <div className="w-20 h-16 bg-blue-300 rounded mb-4"></div>
+              </div>
+              <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
+                Shop home
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Up to 60% Off */}
+        <div className="col-span-12 md:col-span-3">
+          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#ffc220' }}>
+            <div className="p-6 h-full flex flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">Up to 60% off</h3>
+                <div className="w-16 h-20 bg-gray-600 rounded mb-4"></div>
+              </div>
+              <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
+                Shop now
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Skincare Offer */}
+        <div className="col-span-12 md:col-span-3">
+          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#f5e6d3' }}>
+            <div className="p-6 h-full flex flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">Save on La Roche-Posay Anthelios</h3>
+                <div className="flex space-x-2 mb-4">
+                  <div className="w-12 h-16 bg-orange-400 rounded"></div>
+                  <div className="w-12 h-16 bg-orange-400 rounded"></div>
+                </div>
+              </div>
+              <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
+                Shop now
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom Row */}
+      <div className="grid grid-cols-12 gap-4 h-[200px]">
+        {/* Jurassic World Movie */}
+        <div className="col-span-12 md:col-span-6">
+          <div className="h-full rounded-lg overflow-hidden" style={{ backgroundColor: '#e6f3ff' }}>
+            <div className="p-6 h-full flex flex-col justify-between">
+              <div>
+                <h3 className="text-lg font-bold text-gray-800 mb-4">New Jurassic World movie</h3>
+                <div className="w-24 h-16 bg-green-400 rounded mb-4"></div>
+              </div>
+              <Button variant="link" className="text-blue-600 p-0 h-auto self-start">
+                Shop toys & more
+              </Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Additional Promotional Space */}
+        <div className="col-span-12 md:col-span-6">
+          <div className="h-full rounded-lg overflow-hidden bg-gray-100">
+            <div className="p-6 h-full flex flex-col justify-center items-center text-center">
+              <h3 className="text-xl font-bold text-gray-800 mb-4">Shop by Category</h3>
+              <Button 
+                onClick={() => onCategorySelect('electronics')}
+                className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-6 py-2"
               >
-                <CardContent className="p-4 text-center">
-                  <div className="bg-gray-50 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-3">
-                    <Icon className="h-8 w-8 text-primary" />
-                  </div>
-                  <h3 className="font-medium text-sm capitalize text-foreground">{category.name.replace('-', ' ')}</h3>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    {category.product_count} products
-                  </p>
-                </CardContent>
-              </Card>
-            );
-          })}
+                Browse All Categories
+              </Button>
+            </div>
+          </div>
         </div>
-      </div>
-
-      {/* Secondary promotional grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-        <Card className="overflow-hidden border-0 shadow-lg">
-          <CardContent className="p-0">
-            <div className="bg-pink-100 p-6">
-              <h3 className="text-lg font-bold text-gray-800 mb-2">Premium beauty. Victoria's Secret.</h3>
-              <Button variant="link" className="text-primary p-0 h-auto">
-                Shop now →
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="overflow-hidden border-0 shadow-lg">
-          <CardContent className="p-0">
-            <div className="bg-yellow-100 p-6">
-              <h3 className="text-lg font-bold text-gray-800 mb-2">Hot, new beauty from ₹10</h3>
-              <Button variant="link" className="text-primary p-0 h-auto">
-                Shop now →
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="overflow-hidden border-0 shadow-lg">
-          <CardContent className="p-0">
-            <div className="bg-blue-100 p-6">
-              <h3 className="text-lg font-bold text-gray-800 mb-2">Classroom supplies for teachers</h3>
-              <Button variant="link" className="text-primary p-0 h-auto">
-                Shop now →
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="overflow-hidden border-0 shadow-lg">
-          <CardContent className="p-0">
-            <div className="bg-walmart-yellow p-6">
-              <h3 className="text-lg font-bold text-gray-800 mb-2">Up to 55% off</h3>
-              <Button variant="link" className="text-primary p-0 h-auto">
-                Shop now →
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
       </div>
 
       {/* Trust Features Section */}
-      <div className="bg-gray-50 rounded-lg p-8">
+      <div className="bg-gray-50 rounded-lg p-8 mt-8">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-foreground mb-4">Why Trust TrustMart?</h2>
-          <p className="text-lg text-muted-foreground">Our innovative trust system ensures you shop with confidence</p>
+          <h2 className="text-3xl font-bold text-gray-800 mb-4">Why Trust TrustMart?</h2>
+          <p className="text-lg text-gray-600">Our innovative trust system ensures you shop with confidence</p>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -195,24 +209,24 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
             <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">🛡️</span>
             </div>
-            <h3 className="text-lg font-bold text-foreground mb-2">Merchant Credit Tags</h3>
-            <p className="text-muted-foreground text-sm">Every merchant gets a verified credit rating: Excellent, Good, or Moderate based on their track record.</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">Merchant Credit Tags</h3>
+            <p className="text-gray-600 text-sm">Every merchant gets a verified credit rating: Excellent, Good, or Moderate based on their track record.</p>
           </div>
           
           <div className="text-center">
             <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">⭐</span>
             </div>
-            <h3 className="text-lg font-bold text-foreground mb-2">Credibility Scores</h3>
-            <p className="text-muted-foreground text-sm">Customer reviews are scored for trustworthiness with color-coded credibility indicators.</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">Credibility Scores</h3>
+            <p className="text-gray-600 text-sm">Customer reviews are scored for trustworthiness with color-coded credibility indicators.</p>
           </div>
           
           <div className="text-center">
             <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">🔍</span>
             </div>
-            <h3 className="text-lg font-bold text-foreground mb-2">Smart Sorting</h3>
-            <p className="text-muted-foreground text-sm">Sort reviews by credibility to see the most trustworthy opinions first.</p>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">Smart Sorting</h3>
+            <p className="text-gray-600 text-sm">Sort reviews by credibility to see the most trustworthy opinions first.</p>
           </div>
         </div>
       </div>
