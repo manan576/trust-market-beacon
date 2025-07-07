@@ -45,7 +45,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
                 <span className="inline-block bg-blue-600 text-white px-3 py-1 rounded text-sm font-bold mb-2">
                   New Arrivals
                 </span>
-                <h3 className="text-xl font-bold text-gray-800 mb-4">
+                <h3 className="text-xl font-bold mb-4" style={{ color: '#001E60' }}>
                   Hot, new beauty from $10
                 </h3>
                 <img
@@ -70,7 +70,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
             <div className="p-8 flex flex-col md:flex-row items-center h-full">
               <div className="flex-1">
                 <p className="text-gray-800 mb-2">Get it in as fast as an hour*</p>
-                <h2 className="text-4xl font-bold text-gray-800 mb-6">
+                <h2 className="text-4xl font-bold mb-6" style={{ color: '#001E60' }}>
                   Hot July 4th savings
                 </h2>
                 <Button className="bg-white text-black hover:bg-gray-100 rounded-full px-6 py-2">
@@ -111,7 +111,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
           >
             <div className="p-6 flex flex-col h-full justify-between">
               <div>
-                <h3 className="text-lg font-bold text-gray-800 mb-4">
+                <h3 className="text-lg font-bold mb-4" style={{ color: '#001E60' }}>
                   Tons of classroom supplies for teachers
                 </h3>
                 <img
@@ -135,7 +135,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
           >
             <div className="p-6 flex flex-col h-full justify-between">
               <div>
-                <h3 className="text-lg font-bold text-gray-800 mb-4">
+                <h3 className="text-lg font-bold mb-4" style={{ color: '#001E60' }}>
                   Save on home appliances
                 </h3>
                 <img
@@ -159,7 +159,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
           >
             <div className="p-6 flex flex-col h-full justify-between">
               <div>
-                <h3 className="text-lg font-bold text-gray-800 mb-4">
+                <h3 className="text-lg font-bold mb-4" style={{ color: '#001E60' }}>
                   Summer home trends
                 </h3>
                 <img
@@ -183,7 +183,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
           >
             <div className="p-6 flex flex-col h-full justify-between">
               <div>
-                <h3 className="text-lg font-bold text-gray-800 mb-4">Up to 60% off</h3>
+                <h3 className="text-lg font-bold mb-4" style={{ color: '#001E60' }}>Up to 60% off</h3>
                 <img
                   src="/images/fan.png"
                   alt="Tower fan"
@@ -205,7 +205,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
           >
             <div className="p-6 flex flex-col h-full justify-between">
               <div>
-                <h3 className="text-lg font-bold text-gray-800 mb-4">
+                <h3 className="text-lg font-bold mb-4" style={{ color: '#001E60' }}>
                   Save on La Roche-Posay Anthelios
                 </h3>
                 <div className="flex space-x-2">
@@ -286,15 +286,12 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
             style={{ backgroundColor: '#D1C4E9' }}
           >
             <div className="p-6 flex flex-col h-full justify-center items-center">
-              <h3 className="text-xl font-bold text-gray-800 mb-4">
+              <h3 className="text-xl font-bold mb-4" style={{ color: '#001E60' }}>
                 Shop by Category
               </h3>
-              <Button
-                onClick={() => onCategorySelect('electronics')}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full"
-              >
-                Browse All Categories
-              </Button>
+              <p className="text-sm text-gray-600 mb-4">
+                Browse categories in the navigation bar above
+              </p>
             </div>
           </div>
         </div>
@@ -307,7 +304,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
           >
             <div className="p-6 flex flex-col h-full justify-between">
               <div>
-                <h3 className="text-lg font-bold text-gray-800 mb-4">
+                <h3 className="text-lg font-bold mb-4" style={{ color: '#001E60' }}>
                   New Jurassic World movie
                 </h3>
                 <img
@@ -354,7 +351,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
       {/* Trust Features Section */}
       <div className="bg-gray-50 rounded-lg p-8 mt-8">
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">
+          <h2 className="text-3xl font-bold mb-4" style={{ color: '#001E60' }}>
             Why Trust TrustMart?
           </h2>
           <p className="text-lg text-gray-600">
@@ -366,7 +363,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
             <div className="bg-green-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">🛡️</span>
             </div>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">
+            <h3 className="text-lg font-bold mb-2" style={{ color: '#001E60' }}>
               Merchant Credit Tags
             </h3>
             <p className="text-gray-600 text-sm">
@@ -378,7 +375,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
             <div className="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">⭐</span>
             </div>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">
+            <h3 className="text-lg font-bold mb-2" style={{ color: '#001E60' }}>
               Credibility Scores
             </h3>
             <p className="text-gray-600 text-sm">
@@ -390,7 +387,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
             <div className="bg-purple-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
               <span className="text-2xl">🔍</span>
             </div>
-            <h3 className="text-lg font-bold text-gray-800 mb-2">
+            <h3 className="text-lg font-bold mb-2" style={{ color: '#001E60' }}>
               Smart Sorting
             </h3>
             <p className="text-gray-600 text-sm">

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { ShoppingCart, Search, Menu, X, User, MapPin, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { useCategories } from '@/hooks/useCategories';
 
 interface HeaderProps {
   cartCount: number;
@@ -16,6 +17,7 @@ interface HeaderProps {
 const Header = ({ cartCount, onCartClick, onLogoClick, onProfileClick, onCategorySelect, onSearch }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const { data: categories = [] } = useCategories();
 
   const handleSearch = () => {
     if (onSearch && searchQuery.trim()) {
@@ -130,25 +132,18 @@ const Header = ({ cartCount, onCartClick, onLogoClick, onProfileClick, onCategor
         <div className="container mx-auto px-4">
           <nav className="hidden md:block">
             <div className="flex items-center space-x-8 py-3">
-              <button className="flex items-center text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors">
-                <Menu className="h-4 w-4 mr-2" />
-                Departments
-              </button>
-              <button className="flex items-center text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors">
-                Services
-                <ChevronDown className="h-4 w-4 ml-1" />
-              </button>
-              <button className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors">Get it Fast</button>
+              {categories.map((category) => (
+                <button 
+                  key={category.id}
+                  onClick={() => onCategorySelect && onCategorySelect(category.name)}
+                  className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors capitalize"
+                >
+                  {category.name.replace('-', ' ')}
+                </button>
+              ))}
               <button className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors">New Arrivals</button>
               <button className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors">Rollbacks & more</button>
-              <button className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors">Dinner Made Easy</button>
-              <button className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors">Pharmacy Delivery</button>
               <button className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors">Trending</button>
-              <button className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors">Swim Shop</button>
-              <button className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors">My Items</button>
-              <button className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors">Auto Service</button>
-              <button className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors">Only at Walmart</button>
-              <button className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors">Registry</button>
               <button className="text-sm font-medium text-gray-800 hover:text-blue-600 transition-colors">Walmart+</button>
             </div>
           </nav>
@@ -179,9 +174,18 @@ const Header = ({ cartCount, onCartClick, onLogoClick, onProfileClick, onCategor
 
             {/* Mobile Navigation */}
             <div className="px-4 space-y-1">
-              <button className="block w-full text-left text-sm font-medium text-gray-800 hover:text-blue-600 px-3 py-2">Departments</button>
-              <button className="block w-full text-left text-sm font-medium text-gray-800 hover:text-blue-600 px-3 py-2">Services</button>
-              <button className="block w-full text-left text-sm font-medium text-gray-800 hover:text-blue-600 px-3 py-2">Get it Fast</button>
+              {categories.map((category) => (
+                <button 
+                  key={category.id}
+                  onClick={() => {
+                    onCategorySelect && onCategorySelect(category.name);
+                    setIsMenuOpen(false);
+                  }}
+                  className="block w-full text-left text-sm font-medium text-gray-800 hover:text-blue-600 px-3 py-2 capitalize"
+                >
+                  {category.name.replace('-', ' ')}
+                </button>
+              ))}
               <button className="block w-full text-left text-sm font-medium text-gray-800 hover:text-blue-600 px-3 py-2">New Arrivals</button>
             </div>
           </div>
