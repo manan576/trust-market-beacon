@@ -49,7 +49,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
                   Hot, new beauty from $10
                 </h3>
                 <img
-                  src="/images/beauty.png"
+                  src="image.png"
                   alt="Beauty"
                   className="w-full h-40 object-cover rounded"
                 />
