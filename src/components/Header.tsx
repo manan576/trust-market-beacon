@@ -4,6 +4,7 @@ import { ShoppingCart, Search, Menu, X, User, MapPin, ChevronDown } from 'lucide
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useCategories } from '@/hooks/useCategories';
+import walmartLogoWhite from '@/assets/walmart-logo-white.png';
 
 interface HeaderProps {
   cartCount: number;
@@ -43,9 +44,7 @@ const Header = ({ cartCount, onCartClick, onLogoClick, onProfileClick, onCategor
                 className="flex items-center cursor-pointer"
                 onClick={onLogoClick}
               >
-                <div className="w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center mr-2">
-                  <span className="text-blue-600 font-bold text-lg">*</span>
-                </div>
+                <img src={walmartLogoWhite} alt="Walmart" className="w-8 h-8 mr-2" />
                 <span className="text-white font-bold text-xl">Walmart</span>
               </div>
 
