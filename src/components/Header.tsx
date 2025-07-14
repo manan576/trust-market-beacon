@@ -4,7 +4,7 @@ import { ShoppingCart, Search, Menu, X, User, MapPin, ChevronDown } from 'lucide
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useCategories } from '@/hooks/useCategories';
-import walmartLogoWhite from '@/assets/walmart-logo-white.png';
+import walmartLogoWhite from '@/assets/walmart.png';
 
 interface HeaderProps {
   cartCount: number;
@@ -104,10 +104,15 @@ const Header = ({ cartCount, onCartClick, onLogoClick, onProfileClick, onCategor
               </div>
 
               {/* Account */}
-              <div className="hidden md:flex flex-col items-center text-white hover:bg-white/10 px-3 py-2 rounded cursor-pointer" onClick={onProfileClick}>
-                <User className="h-5 w-5" />
-                <span className="text-xs">Sign In</span>
-              </div>
+              {/* Account */}
+                <div 
+                  className="hidden md:flex flex-col items-center text-white hover:bg-white/10 px-3 py-5 rounded cursor-pointer" 
+                  onClick={onProfileClick}
+                >
+                  <User className="h-5 w-5" />
+                  <span className="text-xs mt-1.5">Profile</span> {/* 👈 This moves text down slightly */}
+                </div>
+
 
               {/* Cart */}
               <div className="relative text-white hover:bg-white/10 flex items-center px-3 py-2 rounded cursor-pointer" onClick={onCartClick}>
@@ -119,7 +124,7 @@ const Header = ({ cartCount, onCartClick, onLogoClick, onProfileClick, onCategor
                     </span>
                   )}
                 </div>
-                <span className="text-sm font-medium">$0.00</span>
+                <span className="text-sm font-medium">₹0.00</span>
               </div>
             </div>
           </div>

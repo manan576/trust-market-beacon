@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import walmartLogoBlue from '@/assets/walmart-logo-blue.png';
 import walmartLogoWhite from '@/assets/walmart-logo-white.png';
+import walmart from '@/assets/walmart.png';
 
 const LoginPage = () => {
   const [username, setUsername] = useState('');
@@ -31,7 +32,7 @@ const LoginPage = () => {
       <header className="border-b border-gray-200">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center">
-            <img src={walmartLogoWhite} alt="Walmart" className="w-8 h-8 mr-2" />
+            <img src={walmart} alt="Walmart" className="w-8 h-8 mr-2" />
             <div className="text-2xl font-bold text-[#0071dc]">Walmart</div>
           </div>
         </div>
@@ -43,7 +44,7 @@ const LoginPage = () => {
           {/* Walmart Logo */}
           <div className="text-center mb-8">
             <div className="inline-block mb-4">
-              <img src={walmartLogoBlue} alt="Walmart" className="w-16 h-16" />
+              <img src={walmart} alt="Walmart" className="w-16 h-16" />
             </div>
             <h1 className="text-2xl font-semibold text-gray-900 mb-2">
               Sign in to your account

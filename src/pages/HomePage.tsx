@@ -53,7 +53,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
 
       {/* Single Contiguous Grid */}
       <div className="grid grid-cols-12 gap-4 auto-rows-auto">
-        {/* 1) Hot, new beauty from $10 */}
+        {/* 1) Hot, new beauty from ₹100 */}
         <div className="col-span-12 md:col-span-3">
           <div
             className="rounded-lg overflow-hidden h-full"
@@ -68,7 +68,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
                   className="text-xl font-bold mb-4"
                   style={{ color: "#001E60" }}
                 >
-                  Hot, new beauty from $10
+                  Hot, new beauty from ₹100
                 </h3>
                 <img
                   src="./lipstick.png"
@@ -406,7 +406,7 @@ const HomePage = ({ onCategorySelect }: HomePageProps) => {
       <div className="bg-gray-50 rounded-lg p-8 mt-8">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-4" style={{ color: "#001E60" }}>
-            Why Trust TrustMart?
+            Why TrustMart?
           </h2>
           <p className="text-lg text-gray-600">
             Our innovative trust system ensures you shop with confidence
